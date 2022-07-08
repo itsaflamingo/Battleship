@@ -104,4 +104,6 @@ tiles.forEach((tile) => tile.addEventListener('click', (e) => {
     ps.publish('player-turn', target);
 }));
 
+console.log('game');
+
 export {Gameboard, tiles};

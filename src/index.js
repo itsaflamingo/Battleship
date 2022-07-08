@@ -89,9 +89,10 @@ let computerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer
 let playerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ];
 
 
-console.log(Ship('Carrier', 5).shipLocation([p1, p2, p3, p4, p5], playerBoats));
-console.log(Ship('Carrier', 5).shipLocation([c1, c2, c3, c4, c5], computerBoats));
+// console.log(Ship('Carrier', 5).shipLocation([p1, p2, p3, p4, p5], playerBoats));
+// console.log(Ship('Carrier', 5).shipLocation([c1, c2, c3, c4, c5], computerBoats));
 
+console.log('hi');
 
 export {Ship, Players, carrier, playerBoats, computerBoats};
 
