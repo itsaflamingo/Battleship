@@ -1,29 +1,47 @@
+const generateBoard = (board) => {
+    const thisBoard = document.querySelector(`.${board}`);
 
-    const body = document.querySelector('body');
-    const container = document.createElement('div');
-    container.setAttribute('class', 'container');
-    const header = document.createElement('div');
-    header.setAttribute('class', 'header');
-    const main = document.createElement('div');
-    main.setAttribute('class', 'main');
+    for(let i=1; i<=100; i++) {
+        const div = document.createElement('div');
+        div.setAttribute('class', 'tile');
+        let a = '';
+        if(board === 'player-board') a='p';
+        else a='c';
 
-    const playerSection = document.createElement('div');
-    playerSection.setAttribute('class', 'player-section');
-    const playerBoard = document.createElement('div');
-    playerBoard.setAttribute('class', 'player-board');
+        div.setAttribute('id', `${a}${i}`);
+        thisBoard.appendChild(div);
+    }
+}
 
-    const computerSection = document.createElement('div');
-    computerSection.setAttribute('class', 'computer-section');
-    const computerBoard = document.createElement('div');
-    computerBoard.setAttribute('class', 'computer-board');
+    function display() {
+        const body = document.querySelector('body');
+        const container = document.createElement('div');
+        container.setAttribute('class', 'container');
+        const header = document.createElement('div');
+        header.setAttribute('class', 'header');
+        const main = document.createElement('div');
+        main.setAttribute('class', 'main');
 
-    playerSection.appendChild(playerBoard);
-    computerSection.appendChild(computerBoard);
+        const playerSection = document.createElement('div');
+        playerSection.setAttribute('class', 'player-section');
+        const playerBoard = document.createElement('div');
+        playerBoard.setAttribute('class', 'player-board');
 
-    main.appendChild(playerSection);
-    main.appendChild(computerSection);
+        const computerSection = document.createElement('div');
+        computerSection.setAttribute('class', 'computer-section');
+        const computerBoard = document.createElement('div');
+        computerBoard.setAttribute('class', 'computer-board');
 
-    container.appendChild(header);
-    container.appendChild(main);
+        playerSection.appendChild(playerBoard);
+        computerSection.appendChild(computerBoard);
 
-    body.appendChild(container);
+        main.appendChild(playerSection);
+        main.appendChild(computerSection);
+
+        container.appendChild(header);
+        container.appendChild(main);
+
+        body.appendChild(container);
+}
+
+export {display, generateBoard};

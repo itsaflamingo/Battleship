@@ -6,8 +6,7 @@ module.exports = {
     entry: {
       display: './src/display.js',
       index: './src/index.js',
-      subscriptions: './src/subscriptions.js',
-      gameboard: './src/gameboard.js'
+      eventlisteners: './src/eventlisteners.js'
     },
     plugins: [
       new HtmlWebpackPlugin({

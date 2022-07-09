@@ -1,10 +1,16 @@
-import {computerBoats, playerBoats, Ships} from "./index.js";
+import {generateBoard} from "./display.js"
+import { Ship, ships, computerBoats, playerBoats } from "./ship.js"
 
 const Gameboard = () => {
+    // const computerBoats = compBoats;
+    // const playerBoats = plrBoats;
     const ComputerBoard = () => {
         const setLocation = (boat, ...arr) => {
             const location = arr;
             return boat.shipLocation(location, computerBoats);
+        }
+        const makeBoard = () => {
+            generateBoard('computer-board');
         }
         const receiveAttack = (hitSpot) => {
             let compMissedShots = [];
@@ -36,12 +42,16 @@ const Gameboard = () => {
         return {
             setLocation,
             receiveAttack,
+            makeBoard
         }
     }
     const PlayerBoard = () => {
         const setLocation = (boat, ...arr) => {
             const location = arr;
             return boat.shipLocation(location, playerBoats);
+        }
+        const makeBoard = () => {
+            generateBoard('player-board');
         }
         const receiveAttack = (hitSpot) => {
             let playerMissedShots = [];
@@ -71,39 +81,13 @@ const Gameboard = () => {
         return {
             setLocation,
             receiveAttack,
-        }
-    }
-    const generateBoard = (board) => {
-        const thisBoard = document.querySelector(`.${board}`);
-    
-        for(let i=1; i<=100; i++) {
-            const div = document.createElement('div');
-            div.setAttribute('class', 'tile');
-            let a = '';
-            if(board === 'player-board') a='p';
-            else a='c';
-
-            div.setAttribute('id', `${a}${i}`);
-            thisBoard.appendChild(div);
+            makeBoard
         }
     }
     return {
         ComputerBoard,
         PlayerBoard,
-        generateBoard
     }
 }
 
-Gameboard().generateBoard('computer-board');
-Gameboard().generateBoard('player-board');
-
-const tiles = document.querySelectorAll('.tile');
-
-tiles.forEach((tile) => tile.addEventListener('click', (e) => {
-    const target = (e.target.id).slice(1);
-    ps.publish('player-turn', target);
-}));
-
-console.log('game');
-
-export {Gameboard, tiles};
+export {Gameboard};

@@ -1,98 +1,56 @@
-import {pubSub, ps} from './subscriptions.js';
-import {Gameboard, tiles} from './gameboard.js'
+import './styles.css'
+import {display} from './display.js'
+import {Gameboard} from './gameboard.js'
+import {Ship, playerBoats, computerBoats} from './ship.js'
+import {Players} from './player.js'
+import {tiles} from './eventlisteners.js'
 
-function Players() {
-    let isPlayer = true;
-    const Computer = () => {
-        const _randomNum = () => {
-            let num = Math.floor(Math.random() * (100-1) + 1);
-            if(occupiedSpots.indexOf(num) !== -1) {
-                _randomNum();
+display();
+
+function pubSub() {
+    let subscribers = {};
+
+    const publish = (eventName, data) => {
+        if (!Array.isArray(subscribers[eventName])) {
+            return;
+          }
+          subscribers[eventName].forEach((callback) => {
+            callback(data);
+          })
+    }
+    const subscribe = (eventName, callback) => {
+        if (!Array.isArray(subscribers[eventName])) {
+            subscribers[eventName] = [];
             }
-            return num;
-        };
-        const compAttack = () => {
-            console.log('computer');
-            return Gameboard().PlayerBoard().receiveAttack(_randomNum())
-        };
-        isPlayer = true;
-        return {
-            compAttack
-        }
-    }
-
-    const Player = () => {
-        const playerAttack = (target) => {
-            console.log('player', target);
-            return Gameboard().ComputerBoard().receiveAttack(target);
-        };
-        isPlayer = false;
-        return {
-            playerAttack
-        }
-    }
-
-    const playerTurn = (target) => {
-        return (isPlayer ? Player().playerAttack(target) : Computer().compAttack()); 
+            subscribers[eventName].push(callback);
+            const index = subscribers[eventName].length-1;
+    
+            return {
+                unsubscribe() {
+                    subscribers[eventName].splice(index, 1);
+                }
+            }
     }
     return {
-        Computer,
-        Player,
-        playerTurn
+        publish,
+        subscribe,
     }
 }
+const ps = pubSub();
+//TODO: move all outside code to a function and call from index
+const gb = Gameboard();
+const cb = gb.ComputerBoard();
+const pb = gb.PlayerBoard();
 
-function Ship (name, length) { 
-    const isHit = (hit, playerArr) => {
-        let thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName)
-        thisBoat[0].hitSpot.push(hit);
-        occupiedSpots.push(hit);
-        console.log(thisBoat[0]);
-        return _isSunk(boat.hitSpot,playerArr, thisBoat[0]);
-    }
-    const _isSunk = (hit, playerArr, thisBoat) => {
-        if(hit.length === thisBoat.length) {
-            thisBoat.sunk = true;
-            //remove element from boats
-            playerArr.splice(index, 1);
-        }
-        return thisBoat;
-    }
-    const shipLocation = (location = [], playerArr = []) => {
-        let thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName);
-        thisBoat[0].coordinates = location;
-        return thisBoat[0];        
-    }
+cb.makeBoard();
+pb.makeBoard();
 
-    const boat = {
-        boatName: name,
-        coordinates: [],
-        length: length,
-        hitSpot: [],
-        sunk: false,
-        isHit,
-        shipLocation
-    }
+ps.subscribe('player-turn', Players().playerTurn);
 
-    return boat;
-}
-let carrier = ()=> Ship('Carrier', 5);
-let battleship = ()=> Ship('Battleship', 4);
-let cruiser = ()=> Ship('Cruiser', 3);
-let submarine = ()=>Ship('Submarine', 3);
-let destroyer = ()=>Ship('Destroyer', 2);
+console.log(Ship('Carrier', 5).shipLocation([p1, p2, p3, p4, p5], playerBoats));
+console.log(Ship('Carrier', 5).shipLocation([c1, c2, c3, c4, c5], computerBoats));
 
-let occupiedSpots = [];
-
-// with that, you could:
-let computerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ];
-let playerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ];
+export {pubSub, ps}
 
 
-// console.log(Ship('Carrier', 5).shipLocation([p1, p2, p3, p4, p5], playerBoats));
-// console.log(Ship('Carrier', 5).shipLocation([c1, c2, c3, c4, c5], computerBoats));
-
-console.log('hi');
-
-export {Ship, Players, carrier, playerBoats, computerBoats};
 
