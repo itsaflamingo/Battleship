@@ -5,8 +5,9 @@ module.exports = {
     mode: 'development',
     entry: {
       display: './src/display.js',
+      eventlisteners: './src/eventlisteners.js',
       index: './src/index.js',
-      eventlisteners: './src/eventlisteners.js'
+      pubsub: './src/pubsub.js'
     },
     plugins: [
       new HtmlWebpackPlugin({

@@ -37,6 +37,9 @@ body {
     height: 48px;
     width: 48px;
 }
+.boat {
+    background-color: rgb(9, 172, 118);
+}
 #p1, #p2, #p3, #p4, #p5 {
     background-color: rgb(1, 118, 186);
 }
