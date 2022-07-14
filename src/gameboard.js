@@ -6,37 +6,17 @@ const Gameboard = (playerBoat) => {
     const ComputerBoard = () => {   
         const setLocation = (boat, arr) => {
             const location = arr;
-            location.forEach(node => {
-                node.classList.add('boat')
-            });
             return boat.shipLocation(location, playerBoat);
         }
         const makeBoard = () => generateBoard('computer-board');
         
         const receiveAttack = (hitSpot) => {
             spotsTaken(hitSpot).compSpotsTaken();
-            let compMissedShots = [];
-            let hitBoat;
-            const boatHit = playerBoat.filter(boat => {
-                boat.coordinates.forEach(num => {
-                    const node = num.id.slice(1);
-                    if(node === hitSpot) {
-                        hitBoat = boat;
-                    }
-                    else {
-                        return;
-                    }
-                })
-                return hitBoat === boat;
-            });
-            if(boatHit.length === 0) {
-                //record coordinates of missed shot
-                compMissedShots.push(hitSpot);
-                return compMissedShots;
-                //record missed shot on board
-            }
-            const name = boatHit[0].boatName;
-            const length = boatHit[0].length;
+            let boat = _filterBoat(hitSpot); 
+            const name = boat.boatName;
+            const length = boat.length;
+            if(boat.boatName === undefined) return boat;
+            
             //send hit coordinates to isHit
             return Ship(name, length).isHit(hitSpot, playerBoat);
         }
@@ -50,8 +30,6 @@ const Gameboard = (playerBoat) => {
     const PlayerBoard = () => {
         const setLocation = (boat, arr) => {
             const location = arr;
-            location.forEach(node => {
-                node.classList.add('boat')});
             return boat.shipLocation(location, playerBoat);
         }
         const makeBoard = () => {
@@ -59,30 +37,10 @@ const Gameboard = (playerBoat) => {
         }
         const receiveAttack = (hitSpot) => {
             spotsTaken(hitSpot).playerSpotsTaken();
-            let playerMissedShots = [];
-            let hitBoat;
-            const boatHit = playerBoat.filter(boat => {
-                boat.coordinates.forEach(num => {
-                    const node = num.id.slice(1);
-                    if(parseInt(node) === hitSpot) {
-                        hitBoat = boat;
-                    }
-                    else {
-                        return;
-                    }
-                })
-                return hitBoat === boat;
-            });
-            
-            if(boatHit.length === 0) {
-                //record coordinates of missed shot
-                playerMissedShots.push(hitSpot);
-                return playerMissedShots;
-                //record missed shot on board
-            }
-
-            const name = boatHit[0].boatName;
-            const length = boatHit[0].length;
+            let boat = _filterBoat(hitSpot) 
+            const name = boat.boatName;
+            const length = boat.length;
+            if(boat.boatName === undefined) return boat;
             //send hit coordinates to isHit
             return Ship(name, length).isHit(hitSpot, playerBoat);
         }
@@ -110,6 +68,32 @@ const Gameboard = (playerBoat) => {
             playerSpotsTaken,
             compSpotsTaken
         }
+    }
+
+    const _filterBoat = (hitSpot) => {
+        let playerMissedShots = [];
+        let hitBoat;
+        const boatHit = playerBoat.filter(boat => {
+            boat.coordinates.forEach(num => {
+                if(num.id === hitSpot) {
+                    hitBoat = boat;
+                }
+                else {
+                    return;
+                }
+            })
+            return hitBoat === boat;
+        });
+        
+        if(boatHit.length === 0) {
+            //record coordinates of missed shot
+            playerMissedShots.push(hitSpot);
+            return playerMissedShots;
+            //record missed shot on board
+        }
+
+        return boatHit[0];
+
     }
     return {
         ComputerBoard,

@@ -3,25 +3,25 @@ import {Gameboard} from './gameboard.js'
 function Players(compBoats = [], playerBoats = []) {
     let isPlayer = true;
     const Computer = (playerActiveSpots = []) => {
-        const _randomNum = () => {
+        const randomNum = () => {
             let num = Math.floor(Math.random() * (100-1) + 1);
             if(playerActiveSpots.indexOf(num) !== -1) {
-                _randomNum();
+                randomNum();
             }
-            console.log(num);
             return num;
         };
-        const compAttack = () => {
-            return Gameboard(compBoats).PlayerBoard().receiveAttack(_randomNum());
+        const compAttack = (num) => {
+            return Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`);
         };
         isPlayer = true;
         return {
-            compAttack
+            compAttack,
+            randomNum
         }
     }
     const Player = () => {
         const playerAttack = (target) => {
-            return Gameboard(playerBoats).ComputerBoard().receiveAttack(target);
+            return Gameboard(compBoats).ComputerBoard().receiveAttack(target);
         };
         isPlayer = false;
         return {
@@ -29,7 +29,7 @@ function Players(compBoats = [], playerBoats = []) {
         }
     }
     const playerTurn = (target) => {
-        return (isPlayer ? Player().playerAttack(target) : Computer().compAttack()); 
+        return isPlayer ? Player().playerAttack(target) : Computer().compAttack(Computer().randomNum()); 
     }
     return {
         Computer,

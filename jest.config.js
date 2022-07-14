@@ -5,6 +5,5 @@ module.exports = {
         '\\.(css|less)$': '<rootDir>/test/jest/__mocks__/styleMock.js',
     },
     verbose: true,
-    
   }
   

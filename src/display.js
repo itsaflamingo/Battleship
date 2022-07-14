@@ -22,16 +22,26 @@ const generateBoard = (board) => {
         const main = document.createElement('div');
         main.setAttribute('class', 'main');
 
+        const title = document.createElement('h1');
+        title.innerHTML = 'BATTLESHIP';
+
         const playerSection = document.createElement('div');
         playerSection.setAttribute('class', 'player-section');
         const playerBoard = document.createElement('div');
         playerBoard.setAttribute('class', 'player-board');
+
 
         const computerSection = document.createElement('div');
         computerSection.setAttribute('class', 'computer-section');
         const computerBoard = document.createElement('div');
         computerBoard.setAttribute('class', 'computer-board');
 
+        const moveBtn = document.createElement('button');
+        moveBtn.setAttribute('id', 'move-btn');
+        moveBtn.innerHTML = 'MOVE SHIP'
+
+        header.appendChild(title);
+        header.appendChild(moveBtn);
         playerSection.appendChild(playerBoard);
         computerSection.appendChild(computerBoard);
 
@@ -43,5 +53,11 @@ const generateBoard = (board) => {
 
         body.appendChild(container);
 }
+const hitSpot = () => {
+    
+}
+const addClassToLocation = (array) => {
+    array.forEach(node => node.classList.add('boat'));
+}
 
-export {display, generateBoard};
+export {display, generateBoard, addClassToLocation};

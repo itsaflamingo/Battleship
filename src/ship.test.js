@@ -1,4 +1,8 @@
 import { Ship } from './ship.js'
+import {makeShips} from './ship.js'
+
+let computerBoats = makeShips().computerBoats;
+let playerBoats = makeShips().playerBoats;
 
 test('factory function returns object', () => {
     expect(Ship('Carrier', 5)).toMatchObject({
@@ -10,11 +14,19 @@ test('factory function returns object', () => {
 })
 
 test('when hit, factory function returns modified object', () => {
-    expect(Ship('Destroyer', 2).isHit(1, ships)).toMatchObject({
-        boatName: 'Destroyer',
+    expect(Ship('Carrier', 5).isHit(1, computerBoats)).toMatchObject({
+        boatName: 'Carrier',
         coordinates: [],
-        length: 2,
+        length: 5,
         hitSpot: [1],
         sunk: false,
     });
+
+    expect(Ship('Carrier', 5).isHit(1, playerBoats)).toMatchObject({
+        boatName: 'Carrier',
+        coordinates: [],
+        length: 5,
+        hitSpot: [1],
+        sunk: false,
+    })
 })
