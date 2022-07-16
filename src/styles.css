@@ -17,10 +17,10 @@ body {
     grid-row-start: 2;
     grid-row-end: 3;
     display: flex;
+    gap: 1rem;
 }
 .player-section, .computer-section {
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,29 +45,24 @@ h1 {
 }
 /* Boards */
 .computer-board, .player-board {
-    height: 458px;
-    width: 450px;
-    background-color: pink;
-    gap: 2.5px;
-    display: flex;
-    flex-wrap: wrap;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(10, 5vmin);
 }
 .tile {
-    border: 1px solid black;
-    height: 40px;
-    width: 40px;
+    border: 1px solid rgb(106, 199, 246);
+    background-color: rgb(33, 173, 220);
+}
+.boat {
+    background-color: rgb(113, 112, 112);
 }
 /* boats */
-.boat {
-    background-color: rgb(9, 172, 118);
+.draggable {
     cursor: move;
-}
-#p1, #p2, #p3, #p4, #p5 {
-    background-color: rgb(1, 118, 186);
 }
 .invis {
     visibility: hidden;
+}
+.draggable.dragging {
+    opacity: .5;
 }

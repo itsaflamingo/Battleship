@@ -3,17 +3,23 @@ const generateBoard = (board) => {
 
     for(let i=1; i<=100; i++) {
         const div = document.createElement('div');
-        div.setAttribute('class', 'tile');
+        div.classList.add('draggable');
         let a = '';
-        if(board === 'player-board') a='p';
-        else a='c';
+        if(board === 'player-board'){
+            div.classList.add('player-tile');
+            a='p'
+        }
+        else {
+            div.classList.add('comp-tile');
+            a='c'
+        };
 
         div.setAttribute('id', `${a}${i}`);
         thisBoard.appendChild(div);
     }
 }
 
-    function display() {
+function display() {
         const body = document.querySelector('body');
         const container = document.createElement('div');
         container.setAttribute('class', 'container');
@@ -53,11 +59,40 @@ const generateBoard = (board) => {
 
         body.appendChild(container);
 }
-const hitSpot = () => {
-    
-}
-const addClassToLocation = (array) => {
-    array.forEach(node => node.classList.add('boat'));
+const makeBoats = (boat, array) => {
+    array.forEach(node => {
+        node.classList.add('boat');
+        node.classList.add(boat);
+        node.setAttribute('draggable', 'true');
+    });
 }
 
-export {display, generateBoard, addClassToLocation};
+const dragAndDrop = () => {
+    const draggables = document.querySelectorAll('.draggable');
+    const playerBoard = document.querySelector('.player-board');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging');
+        })
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+        })
+    })
+
+    playerBoard.addEventListener('dragover', e => {
+        //removes default state of not being able to drop
+        e.preventDefault();
+        const draggable = document.querySelector('.dragging');
+        const target = e.target;
+        if(target === null) {
+            return;
+        }
+        else {
+            playerBoard.insertBefore(draggable, target);
+        }
+    })
+}
+
+export {display, generateBoard, makeBoats, dragAndDrop};

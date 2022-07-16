@@ -7,10 +7,7 @@ function click (comp, player) {
         const target = e.target.id;
         console.log(target);
         ps.publish('player-turn', target);
-        console.log('player', player);
         ps.publish('player-turn', target);
-        console.log('comp', comp);
-
     }));
 }
 
