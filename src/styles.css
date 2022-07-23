@@ -22,6 +22,7 @@ body {
 .player-section, .computer-section {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -49,12 +50,9 @@ h1 {
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
 }
-.tile {
+.player-tile, .comp-tile {
     border: 1px solid rgb(106, 199, 246);
     background-color: rgb(33, 173, 220);
-}
-.boat {
-    background-color: rgb(113, 112, 112);
 }
 /* boats */
 .draggable {
@@ -65,4 +63,80 @@ h1 {
 }
 .draggable.dragging {
     opacity: .5;
+}
+.boat {
+    background-color: orange;
+}
+/* ship-section */
+.ship-section {
+    display: flex;
+    height: 20vh;
+    width: 45vw;
+    margin-top: 2vh;
+}
+.ships {
+    height: 100%;
+    width: 40vw;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem;
+}
+.ship {
+    z-index: 10;
+    background-color: orange;
+    border-radius: 20px;
+}
+.xy-btns {
+    display: flex;
+    flex-direction: column;
+}
+.player-board > .carrier, .ships > .carrier {
+    width: 13vw;
+    height: 5vh;
+}
+.player-board > .battleship, .ships > .battleship {
+    width: 10.3vw;
+    height: 5vh;
+}
+.player-board > .cruiser, .ships > .cruiser {
+    width: 7.7vw;
+    height: 5vh;
+}
+.player-board > .submarine, .ships > .submarine {
+    width: 7.7vw;
+    height: 5vh;
+}
+.player-board > .destroyer, .ships > .destroyer {
+    width: 5.2vw;
+    height: 5vh;
+}
+.no-click {
+    pointer-events: none;
+}
+.hide {
+    scale: 0;
+}
+/* vertical */
+.player-board > .carrier.vertical, .ships > .carrier.vertical {
+    height: 25vh;
+    width: 2.6vw;
+}
+.player-board > .battleship.vertical, .ships > .battleship.vertical {
+    height: 20vh;
+    width: 2.6vw;
+}
+.player-board > .cruiser.vertical, .ships > .cruiser.vertical {
+    height: 15vh;
+    width: 2.6vw;
+}
+.player-board > .submarine.vertical, .ships > .submarine.vertical {
+    height: 15vh;
+    width: 2.6vw;
+}
+.player-board > .destroyer.vertical, .ships > .destroyer.vertical {
+    height: 10vh;
+    width: 2.6vw;
 }

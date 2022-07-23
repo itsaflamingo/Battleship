@@ -1,5 +1,5 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
@@ -28,32 +28,13 @@ const gameLoop = () => {
     }
 
     const setBoats = () => {
+        const c = computerDisplay();
 
-        gbp.setLocation(playerBoats[0], [p1, p2, p3, p4, p5]);
-        gbc.setLocation(computerBoats[0], [c1, c2, c3, c4, c5]);
-    
-        gbp.setLocation(playerBoats[1], [p11, p21, p31, p41]);
-        gbc.setLocation(computerBoats[1], [c11, c21, c31, c41]);
-    
-        gbp.setLocation(playerBoats[2], [p8, p9, p10]);
-        gbc.setLocation(computerBoats[2], [c8, c9, c10]);
-    
-        gbp.setLocation(playerBoats[3], [p24, p25, p26]);
-        gbc.setLocation(computerBoats[3], [c24, c25, c26]);
-    
-        gbp.setLocation(playerBoats[4], [p37, p47]);
-        gbc.setLocation(computerBoats[4], [c37, c47]);
-
-        makeBoats('carrier', [p1, p2, p3, p4, p5]);
-        makeBoats('carrier', [c1, c2, c3, c4, c5]);
-        makeBoats('battleship', [p11, p21, p31, p41]);
-        makeBoats('battleship', [c11, c21, c31, c41]);
-        makeBoats('cruiser', [p8, p9, p10]);
-        makeBoats('cruiser', [c8, c9, c10]);
-        makeBoats('submarine', [p24, p25, p26]);
-        makeBoats('submarine', [c24, c25, c26]);
-        makeBoats('destroyer', [p37, p47]);
-        makeBoats('destroyer', [c37, c47]);
+        makeBoats('carrier', c.randomCompDisp(5));
+        makeBoats('battleship', c.randomCompDisp(4));
+        makeBoats('cruiser', c.randomCompDisp(3));
+        makeBoats('submarine', c.randomCompDisp(3));
+        makeBoats('destroyer', c.randomCompDisp(2));
 
         dragAndDrop();
     }
