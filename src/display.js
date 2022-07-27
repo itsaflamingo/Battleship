@@ -1,3 +1,5 @@
+import { ps } from "./pubsub"
+
 const generateBoard = (board) => {
     const thisBoard = document.querySelector(`.${board}`)
 
@@ -40,10 +42,6 @@ function display() {
         computerSection.setAttribute('class', 'computer-section')
         const computerBoard = document.createElement('div')
         computerBoard.setAttribute('class', 'computer-board')
-
-        const moveBtn = document.createElement('button')
-        moveBtn.setAttribute('id', 'move-btn')
-        moveBtn.innerHTML = 'MOVE SHIP'
         
         const shipSection = document.createElement('div')
         shipSection.setAttribute('class', 'ship-section')
@@ -95,7 +93,6 @@ function display() {
        
 
         header.appendChild(title)
-        header.appendChild(moveBtn)
         playerSection.appendChild(playerBoard)
         playerSection.appendChild(shipSection)
         computerSection.appendChild(computerBoard)
@@ -108,48 +105,115 @@ function display() {
 
         body.appendChild(container)
 }
-const makeBoats = (boat, array) => {
-    array.forEach(node => {
-            node.classList.add('boat')
-            node.classList.add('draggable')
-            node.setAttribute('draggable', 'true')
-        node.classList.add(boat)
-    })
+const makeBoats = () => {
+    
+    const setComputerShips = (boat, array) => {
+            array.forEach(node => {
+                node.classList.add('boat')
+                node.classList.add('draggable')
+                node.setAttribute('draggable', 'true')
+            node.classList.add(boat)
+        })
+        ps.publish('comp-set-location', {
+            boat,
+            array 
+        })
+    }
+
+    const setPlayerShips = (boat) => {
+        boat.coordinates.forEach(spot => {
+            if(spot.classList.length <= 2) {
+                spot.classList.add(boat.boatName)
+                spot.classList.remove('player-tile')
+            }
+        })
+    }
+    return {
+        setComputerShips,
+        setPlayerShips
+    }
 }
 const computerDisplay = () => {
     const compBoard = document.querySelector('.computer-board')
 
+    const randomNumGenerator = (length) => {
+        let randomNum = Math.floor(Math.random() * (100-1) + 1)
+        const isVertical = Math.random()
+        const r = randomCompDisp(length)
+        let arr = []
+        if(isVertical > 0.5) {
+            arr = r.mkVertical(randomNum)
+        }
+        else {
+            arr = r.mkHorizontal(randomNum)
+        }
+
+        return arr
+    }
+
     const randomCompDisp = (length) => {
         let array = []
-        const randomNum = Math.floor(Math.random() * (100-1) + 1)
 
-        for(let i=randomNum; i<randomNum+length; i++) {
-            const node = document.getElementById(`c${i}`)
-            const nodeId = node.id
-            let endRow = parseInt(nodeId.slice(1, 2))
-            if(nodeId.length > 2) {
-                endRow = (endRow+1)*10
-            }
-            //if space is occupied by boat
-            if(node.classList.length > 2) {
-                return randomCompDisp(length)
-            }
-            //if boat will overlap
-            if(array.length === 0 && ((randomNum + length) > endRow  || randomNum % 10 === 0)) {
-                return randomCompDisp(length)
-            }
+        const mkVertical = (num) => {
+            const firstNum = Number(String(num)[0])
+            let endCol = firstNum + 90
 
-            array.push(node)
+            for(let i=num; i<num+(length*10); i+=10) {
+                const node = document.getElementById(`c${i}`)
+                //if space is occupied by boat
+                if(node.classList.length > 2) {
+                    return randomNumGenerator(length)
+                }
+                
+                if(num.length > 2) {
+                    const secondNum = Number(String(num)[1])
+                    endCol = secondNum + 90
+                }
+                const gap = endCol - num
+                //if boat will overlap
+                if(gap <= length * 10) {
+                    return randomNumGenerator(length)
+                }
+                array.push(node)
+            }
+            return array
         }
-        return array
+        const mkHorizontal = (num) => {
+            for(let i=num; i<num+length; i++) {
+                const node = document.getElementById(`c${i}`)
+                //if space is occupied by boat
+                if(node.classList.length > 2) {
+                    return randomNumGenerator(length)
+                }
+                const nodeId = node.id
+                let endRow = parseInt(nodeId.slice(1, 2))
+                if(nodeId.length > 2) {
+                    endRow = (endRow+1)*10
+                }
+                //if boat will overlap
+                if(array.length === 0 && ((num + length) > endRow  || num % 10 === 0)) {
+                    return randomNumGenerator(length)
+                }
+                array.push(node)
+            }
+            return array
+        }
+        return {
+            array,
+            mkVertical,
+            mkHorizontal
+        }
     }
-    const preventClick = () => {
-        compBoard.classList.add('no-click');
+
+    const toggleClick = () => {
+        compBoard.classList.toggle('no-click')
     }
 
     return {
         randomCompDisp,
-        preventClick
+        toggleClick,
+        randomNumGenerator
+
     }
 }
 const dragAndDrop = () => {
@@ -161,10 +225,25 @@ const dragAndDrop = () => {
             //add dragging class to entire boat
             draggable.classList.add('dragging')
         })
-        draggable.addEventListener('dragend', (e) => {
+        draggable.addEventListener('dragend', e => {
             //remove dragging class from entire boat
+            const ships = document.querySelector('.ships').childElementCount
+            const boat = e.target.classList[2]
+            let isVertical = false
+            if(draggable.classList.contains('vertical')) {
+                isVertical = true
+            }
+            const numId = draggable.id
+            const num = numId.slice(1, 3)
             draggable.classList.remove('dragging')
+            ps.publish('set-location', {
+                boat,
+                num,
+                isVertical,
+            })
             playerBoard.replaceChild(draggable, e.target.nextSibling)
+
+            if(ships === 0) alterShipSection().isFinished()
         })
     })
 
@@ -195,20 +274,34 @@ const alterShipSection = () => {
                 button.innerHTML = 'X'
             }
         })
-
-        if(ships.length === 0) _isFinished()
     }
 
-    const _isFinished = () => {
+    const isFinished = () => {
         const shipSection = document.querySelector('.ship-section')
-        computerDisplay().preventClick()
-        shipSection.classList.add('.hide')
+        computerDisplay().toggleClick()
+        shipSection.style.display = 'none'
     }
     
     return {
-        changeAxis
+        changeAxis,
+        isFinished
     }
     
 }
+const displayShot = () => {
+    const shotMissed = (spot) => {
+        const target = document.querySelector(`#${spot}`)
+        target.classList.add('miss')
+    }
+    const shotHit = (spot) => {
+        const target = document.querySelector(`#${spot}`)
+        target.classList.add('boom')
+    }
+    
+    return {
+        shotMissed,
+        shotHit
+    }
+}
 
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection}
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot}

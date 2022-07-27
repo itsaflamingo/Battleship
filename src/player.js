@@ -11,8 +11,9 @@ function Players(compBoats = [], playerBoats = []) {
             return num;
         };
         const compAttack = (num) => {
-            return Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`);
-        };
+            return Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`)
+            //if above returns array, not just a number, then call hitAgain() function
+        }
         isPlayer = true;
         return {
             compAttack,

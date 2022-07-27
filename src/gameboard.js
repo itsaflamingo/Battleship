@@ -1,12 +1,19 @@
 import {generateBoard} from "./display.js"
 import { Players } from "./player.js";
+import { ps } from "./pubsub.js";
 import { Ship } from "./ship.js"
 
 const Gameboard = (playerBoat) => {
     const ComputerBoard = () => {   
-        const setLocation = (boat, arr) => {
-            const location = arr;
-            return boat.shipLocation(location, playerBoat);
+        const setLocation = (obj) => {
+            let thisBoat = []
+            playerBoat.forEach(boat => {
+                if(boat.boatName === obj.boat) {
+                    boat.coordinates = obj.array
+                    thisBoat = Ship(boat.boatName, boat.length).shipLocation(boat.coordinates, playerBoat)
+                }
+            })
+            return thisBoat
         }
         const makeBoard = () => generateBoard('computer-board');
         
@@ -18,7 +25,7 @@ const Gameboard = (playerBoat) => {
             if(boat.boatName === undefined) return boat;
             
             //send hit coordinates to isHit
-            return Ship(name, length).isHit(hitSpot, playerBoat);
+            return Ship(name, length).isHit(hitSpot, playerBoat)
         }
 
         return {
@@ -27,10 +34,32 @@ const Gameboard = (playerBoat) => {
             makeBoard
         }
     }
+    
     const PlayerBoard = () => {
-        const setLocation = (boat, arr) => {
-            const location = arr;
-            return boat.shipLocation(location, playerBoat);
+        const setLocation = (obj) => {
+            let num = parseInt(obj.num)
+            let thisBoat
+            playerBoat.forEach(boat => {
+                if(boat.boatName !== obj.boat) {
+                    return
+                }
+
+                if(obj.isVertical === true) {
+                    for(let i = num; i<num+(boat.length*10); i+=10) {
+                        const node = document.querySelector(`#p${i}`)
+                        boat.coordinates.push(node)
+                    }
+                }
+                else {
+                    for(let i = num; i<num+boat.length; i++) {
+                        const node = document.querySelector(`#p${i}`)
+                        boat.coordinates.push(node)
+                    }
+                }
+                ps.publish('set-player-ships', boat)
+                thisBoat = boat
+            })
+            return Ship(thisBoat.boatName, thisBoat.length).shipLocation(thisBoat.coordinates, playerBoat)
         }
         const makeBoard = () => {
             generateBoard('player-board');
@@ -83,11 +112,15 @@ const Gameboard = (playerBoat) => {
                 }
             })
             return hitBoat === boat;
-        });
-        
-        if(boatHit.length === 0) {
+        })
+
+        if(boatHit.length === 1) {
+            ps.publish('hit-shot', hitSpot)
+        }
+        else if(boatHit.length === 0) {
             //record coordinates of missed shot
             playerMissedShots.push(hitSpot);
+            ps.publish('missed-shot', hitSpot)
             return playerMissedShots;
             //record missed shot on board
         }

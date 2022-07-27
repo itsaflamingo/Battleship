@@ -37,35 +37,16 @@ h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 3rem;
 }
-#move-btn {
-    width: 10vw;
-    height: 5vh;
-    background-color: white;
-    border-radius: 20px;
-    border: 1px solid grey;
-}
 /* Boards */
 .computer-board, .player-board {
     display: grid;
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
+    background-color: rgb(33, 173, 220);
 }
 .player-tile, .comp-tile {
     border: 1px solid rgb(106, 199, 246);
     background-color: rgb(33, 173, 220);
-}
-/* boats */
-.draggable {
-    cursor: move;
-}
-.invis {
-    visibility: hidden;
-}
-.draggable.dragging {
-    opacity: .5;
-}
-.boat {
-    background-color: orange;
 }
 /* ship-section */
 .ship-section {
@@ -89,54 +70,127 @@ h1 {
     background-color: orange;
     border-radius: 20px;
 }
+/* boats */
+.player-board > .carrier {
+    height: 100%;
+    width: 500%;
+}
+.player-board > .battleship {
+    height: 100%;
+    width: 400%;
+}
+.player-board > .cruiser {
+    height: 100%;
+    width: 300%;
+}
+.player-board > .submarine {
+    height: 100%;
+    width: 300%;
+}
+.player-board > .destroyer {
+    height: 100%;
+    width: 200%;
+}
+.player-board > .carrier.vertical {
+    height: 500%;
+    width: 100%;
+}
+.player-board > .battleship.vertical {
+    height: 400%;
+    width: 100%;
+}
+.player-board > .cruiser.vertical {
+    height: 300%;
+    width: 100%;
+}
+.player-board > .submarine.vertical {
+    height: 300%;
+    width: 100%;
+}
+.player-board > .destroyer.vertical {
+    height: 200%;
+    width: 100%;
+}
+.draggable {
+    cursor: move;
+}
+.invis {
+    visibility: hidden;
+}
+.draggable.dragging {
+    opacity: .5;
+}
+.boat {
+    background-color: orange;
+}
 .xy-btns {
     display: flex;
     flex-direction: column;
 }
-.player-board > .carrier, .ships > .carrier {
+.ships > .carrier {
     width: 13vw;
     height: 5vh;
 }
-.player-board > .battleship, .ships > .battleship {
+.ships > .battleship {
     width: 10.3vw;
     height: 5vh;
 }
-.player-board > .cruiser, .ships > .cruiser {
+.ships > .cruiser {
     width: 7.7vw;
     height: 5vh;
 }
-.player-board > .submarine, .ships > .submarine {
+.ships > .submarine {
     width: 7.7vw;
     height: 5vh;
 }
-.player-board > .destroyer, .ships > .destroyer {
+.ships > .destroyer {
     width: 5.2vw;
     height: 5vh;
 }
 .no-click {
     pointer-events: none;
 }
-.hide {
-    scale: 0;
-}
 /* vertical */
-.player-board > .carrier.vertical, .ships > .carrier.vertical {
+.ships > .carrier.vertical {
     height: 25vh;
     width: 2.6vw;
 }
-.player-board > .battleship.vertical, .ships > .battleship.vertical {
+.ships > .battleship.vertical {
     height: 20vh;
     width: 2.6vw;
 }
-.player-board > .cruiser.vertical, .ships > .cruiser.vertical {
+.ships > .cruiser.vertical {
     height: 15vh;
     width: 2.6vw;
 }
-.player-board > .submarine.vertical, .ships > .submarine.vertical {
+.ships > .submarine.vertical {
     height: 15vh;
     width: 2.6vw;
 }
-.player-board > .destroyer.vertical, .ships > .destroyer.vertical {
+.ships > .destroyer.vertical {
     height: 10vh;
     width: 2.6vw;
+}
+/* on hit */
+.miss,
+.boom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boom::after,
+.miss::after {
+    content: '';
+    position: absolute;
+    border-radius: 100%;
+    width: 2vmin;
+    height: 2vmin;
+    z-index: 20;
+}
+.miss::after {
+    background-color: rgb(7, 7, 7);
+}
+.boom::after {
+    background-color: red;
 }

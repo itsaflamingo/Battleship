@@ -9,9 +9,10 @@ function click (comp, player) {
 
     compTiles.forEach((tile) => tile.addEventListener('click', e => {
         const target = e.target.id;
+        if(target.classList.length === 5) removeEventListener('click')
         ps.publish('player-turn', target)
-        c.preventClick()
         ps.publish('player-turn', target)
+        console.log(comp, player)
     }))
     axis.addEventListener('click', () => {
         a.changeAxis()

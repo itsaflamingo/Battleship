@@ -1,5 +1,5 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop, computerDisplay} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay, displayShot} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
@@ -17,26 +17,35 @@ const gameLoop = () => {
     const gbc = Gameboard (computerBoats).ComputerBoard();
 
     const subscriptions = () => {
-        ps.subscribe('player-turn', Players(computerBoats, playerBoats).playerTurn);
+        const d = displayShot()
+
+        ps.subscribe('player-turn', Players(computerBoats, playerBoats).playerTurn)
+        ps.subscribe('set-location', gbp.setLocation)
+        ps.subscribe('comp-set-location', gbc.setLocation)
+        ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
+        ps.subscribe('missed-shot', d.shotMissed)
+        ps.subscribe('hit-shot', d.shotHit)
     }
     
     const makeBoards = () => {
-        gbp.makeBoard();
-        gbc.makeBoard();
+        gbp.makeBoard()
+        gbc.makeBoard()
 
-        click(computerBoats, playerBoats);
+        click(computerBoats, playerBoats)
     }
 
     const setBoats = () => {
-        const c = computerDisplay();
+        const c = computerDisplay()
+        const m = makeBoats()
+        c.toggleClick()
 
-        makeBoats('carrier', c.randomCompDisp(5));
-        makeBoats('battleship', c.randomCompDisp(4));
-        makeBoats('cruiser', c.randomCompDisp(3));
-        makeBoats('submarine', c.randomCompDisp(3));
-        makeBoats('destroyer', c.randomCompDisp(2));
+        m.setComputerShips('carrier', c.randomNumGenerator(5))
+        m.setComputerShips('battleship', c.randomNumGenerator(4))
+        m.setComputerShips('cruiser', c.randomNumGenerator(3))
+        m.setComputerShips('submarine', c.randomNumGenerator(3))
+        m.setComputerShips('destroyer', c.randomNumGenerator(2))
 
-        dragAndDrop();
+        dragAndDrop()
     }
 
     return {
@@ -47,11 +56,11 @@ const gameLoop = () => {
 
 }
 
-
 let gl = gameLoop();
 gl.subscriptions();
 gl.makeBoards();
 gl.setBoats();
+
 
 
 
