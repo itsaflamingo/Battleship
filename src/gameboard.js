@@ -3,7 +3,7 @@ import { Players } from "./player.js";
 import { ps } from "./pubsub.js";
 import { Ship } from "./ship.js"
 
-const Gameboard = (playerBoat) => {
+const Gameboard = (playerBoat = []) => {
     const ComputerBoard = () => {   
         const setLocation = (obj) => {
             let thisBoat = []
@@ -18,7 +18,6 @@ const Gameboard = (playerBoat) => {
         const makeBoard = () => generateBoard('computer-board');
         
         const receiveAttack = (hitSpot) => {
-            spotsTaken(hitSpot).compSpotsTaken();
             let boat = _filterBoat(hitSpot); 
             const name = boat.boatName;
             const length = boat.length;
@@ -46,32 +45,36 @@ const Gameboard = (playerBoat) => {
 
                 if(obj.isVertical === true) {
                     for(let i = num; i<num+(boat.length*10); i+=10) {
-                        const node = document.querySelector(`#p${i}`)
-                        boat.coordinates.push(node)
+                        ps.publish('push-coordinates', {
+                            i,
+                            boat
+                        })
                     }
                 }
                 else {
                     for(let i = num; i<num+boat.length; i++) {
-                        const node = document.querySelector(`#p${i}`)
-                        boat.coordinates.push(node)
+                        ps.publish('push-coordinates', {
+                            i,
+                            boat
+                        })
                     }
                 }
-                ps.publish('set-player-ships', boat)
+                ps.publish('set-player-ships', boat)  
                 thisBoat = boat
             })
-            return Ship(thisBoat.boatName, thisBoat.length).shipLocation(thisBoat.coordinates, playerBoat)
+            return thisBoat
         }
         const makeBoard = () => {
             generateBoard('player-board');
         }
         const receiveAttack = (hitSpot) => {
-            spotsTaken(hitSpot).playerSpotsTaken();
+            spotsTaken().playerSpotsTaken(hitSpot)
             let boat = _filterBoat(hitSpot) 
-            const name = boat.boatName;
-            const length = boat.length;
-            if(boat.boatName === undefined) return boat;
+            const name = boat.boatName
+            const length = boat.length
+            if(boat.boatName === undefined) return boat
             //send hit coordinates to isHit
-            return Ship(name, length).isHit(hitSpot, playerBoat);
+            return Ship(name, length).isHit(hitSpot, playerBoat)
         }
         return {
             setLocation,
@@ -80,22 +83,14 @@ const Gameboard = (playerBoat) => {
         }
     }
 
-    const spotsTaken = (spot) => {
-
-        const playerSpotsTaken = () => {
-            let playActiveSpots = [];
-            playActiveSpots.push(spot);
-            Players().Computer(playActiveSpots);
+    const spotsTaken = () => {
+        const playActiveSpots = []
+        const playerSpotsTaken = (spot) => {
+            playActiveSpots.push(spot)
         }
-
-        const compSpotsTaken = () => {
-            let compActiveSpots = [];
-            compActiveSpots.push(spot);
-        }
-
         return {
             playerSpotsTaken,
-            compSpotsTaken
+            playActiveSpots
         }
     }
 
@@ -131,6 +126,7 @@ const Gameboard = (playerBoat) => {
     return {
         ComputerBoard,
         PlayerBoard,
+        spotsTaken
     }
 }
 

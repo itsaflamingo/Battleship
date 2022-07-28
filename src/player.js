@@ -2,14 +2,15 @@ import {Gameboard} from './gameboard.js'
 
 function Players(compBoats = [], playerBoats = []) {
     let isPlayer = true;
-    const Computer = (playerActiveSpots = []) => {
+    const Computer = () => {
         const randomNum = () => {
             let num = Math.floor(Math.random() * (100-1) + 1);
+            const playerActiveSpots = Gameboard().spotsTaken().playActiveSpots
             if(playerActiveSpots.indexOf(num) !== -1) {
                 randomNum();
             }
             return num;
-        };
+        }
         const compAttack = (num) => {
             return Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`)
             //if above returns array, not just a number, then call hitAgain() function
@@ -23,7 +24,7 @@ function Players(compBoats = [], playerBoats = []) {
     const Player = () => {
         const playerAttack = (target) => {
             return Gameboard(compBoats).ComputerBoard().receiveAttack(target);
-        };
+        }
         isPlayer = false;
         return {
             playerAttack

@@ -1,5 +1,5 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop, computerDisplay, displayShot} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
@@ -25,6 +25,7 @@ const gameLoop = () => {
         ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
         ps.subscribe('missed-shot', d.shotMissed)
         ps.subscribe('hit-shot', d.shotHit)
+        ps.subscribe('push-coordinates', pushCoordinates)
     }
     
     const makeBoards = () => {
@@ -51,7 +52,7 @@ const gameLoop = () => {
     return {
         subscriptions, 
         setBoats,
-        makeBoards
+        makeBoards,
     }
 
 }
@@ -60,7 +61,6 @@ let gl = gameLoop();
 gl.subscriptions();
 gl.makeBoards();
 gl.setBoats();
-
 
 
 

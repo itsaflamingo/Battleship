@@ -124,7 +124,7 @@ const makeBoats = () => {
         boat.coordinates.forEach(spot => {
             if(spot.classList.length <= 2) {
                 spot.classList.add(boat.boatName)
-                spot.classList.remove('player-tile')
+                spot.classList.add('player-tile')
             }
         })
     }
@@ -227,6 +227,7 @@ const dragAndDrop = () => {
         })
         draggable.addEventListener('dragend', e => {
             //remove dragging class from entire boat
+            draggable.classList.remove('dragging')
             const ships = document.querySelector('.ships').childElementCount
             const boat = e.target.classList[2]
             let isVertical = false
@@ -235,7 +236,6 @@ const dragAndDrop = () => {
             }
             const numId = draggable.id
             const num = numId.slice(1, 3)
-            draggable.classList.remove('dragging')
             ps.publish('set-location', {
                 boat,
                 num,
@@ -291,10 +291,12 @@ const alterShipSection = () => {
 const displayShot = () => {
     const shotMissed = (spot) => {
         const target = document.querySelector(`#${spot}`)
+        console.log('miss', spot, target)
         target.classList.add('miss')
     }
     const shotHit = (spot) => {
         const target = document.querySelector(`#${spot}`)
+        console.log('hit', spot, target)
         target.classList.add('boom')
     }
     
@@ -303,5 +305,9 @@ const displayShot = () => {
         shotHit
     }
 }
+const pushCoordinates = (obj) => {
+    const node = document.querySelector(`#p${obj.i}`)
+    obj.boat.coordinates.push(node)
+}
 
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot}
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates}

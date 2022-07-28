@@ -6,7 +6,7 @@ function pubSub() {
             return;
           }
           subscribers[eventName].forEach((callback) => {
-            callback(data);
+            console.log(callback(data));
           })
     }
     const subscribe = (eventName, callback) => {
