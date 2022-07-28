@@ -4,7 +4,7 @@ function Players(compBoats = [], playerBoats = []) {
     let isPlayer = true;
     const Computer = () => {
         const randomNum = () => {
-            let num = Math.floor(Math.random() * (100-1) + 1);
+            let num = Math.floor(Math.random() * (100-1) + 1)
             const playerActiveSpots = Gameboard().spotsTaken().playActiveSpots
             if(playerActiveSpots.indexOf(num) !== -1) {
                 randomNum();

@@ -41,14 +41,14 @@ function Ship (name, length) {
 }
 
 const makeShips = () => {
-    let carrier = () => Ship('carrier', 5);
-    let battleship = () => Ship('battleship', 4);
-    let cruiser = () => Ship('cruiser', 3);
-    let submarine = () => Ship('submarine', 3);
-    let destroyer = () => Ship('destroyer', 2);
+    let carrier = () => Ship('carrier', 5)
+    let battleship = () => Ship('battleship', 4)
+    let cruiser = () => Ship('cruiser', 3)
+    let submarine = () => Ship('submarine', 3)
+    let destroyer = () => Ship('destroyer', 2)
 
-    let computerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ];
-    let playerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ];
+    let computerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ]
+    let playerBoats = [ carrier(), battleship(), cruiser(), submarine(), destroyer() ]
 
     return {
         computerBoats, 

@@ -44,15 +44,15 @@ const Gameboard = (playerBoat = []) => {
                 }
 
                 if(obj.isVertical === true) {
-                    for(let i = num; i<num+(boat.length*10); i+=10) {
+                    for(let i = num+10; i<=num+(boat.length*10); i+=10) {
                         ps.publish('push-coordinates', {
                             i,
-                            boat
+                            boat,
                         })
                     }
                 }
                 else {
-                    for(let i = num; i<num+boat.length; i++) {
+                    for(let i = num+1; i<=num+boat.length; i++) {
                         ps.publish('push-coordinates', {
                             i,
                             boat

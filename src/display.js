@@ -241,7 +241,7 @@ const dragAndDrop = () => {
                 num,
                 isVertical,
             })
-            playerBoard.replaceChild(draggable, e.target.nextSibling)
+            draggable.remove()
 
             if(ships === 0) alterShipSection().isFinished()
         })
@@ -255,8 +255,8 @@ const dragAndDrop = () => {
 
         if(target === null) return
         
-        draggable.setAttribute('id', target.id)
-        playerBoard.insertBefore(draggable, target)
+        draggable.setAttribute('id', target.previousSibling.id)
+        playerBoard.insertBefore(draggable, target.previousSibling)
     })
 }
 const alterShipSection = () => {
@@ -308,6 +308,8 @@ const displayShot = () => {
 const pushCoordinates = (obj) => {
     const node = document.querySelector(`#p${obj.i}`)
     obj.boat.coordinates.push(node)
+    node.classList.add('boat')
+    node.classList.add(obj.boat.boatName)
 }
 
 export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates}

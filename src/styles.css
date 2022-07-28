@@ -71,43 +71,43 @@ h1 {
     border-radius: 20px;
 }
 /* boats */
-.player-board > .carrier {
+.player-board > .carrier:nth-child(1) {
     height: 100%;
     width: 500%;
 }
-.player-board > .battleship {
+.player-board > .battleship:nth-child(1) {
     height: 100%;
     width: 400%;
 }
-.player-board > .cruiser {
+.player-board > .cruiser:nth-child(1) {
     height: 100%;
     width: 300%;
 }
-.player-board > .submarine {
+.player-board > .submarine:nth-child(1) {
     height: 100%;
     width: 300%;
 }
-.player-board > .destroyer {
+.player-board > .destroyer:nth-child(1) {
     height: 100%;
     width: 200%;
 }
-.player-board > .carrier.vertical {
+.player-board > .carrier.vertical:nth-child(1) {
     height: 500%;
     width: 100%;
 }
-.player-board > .battleship.vertical {
+.player-board > .battleship.vertical:nth-child(1) {
     height: 400%;
     width: 100%;
 }
-.player-board > .cruiser.vertical {
+.player-board > .cruiser.vertical:nth-child(1) {
     height: 300%;
     width: 100%;
 }
-.player-board > .submarine.vertical {
+.player-board > .submarine.vertical:nth-child(1) {
     height: 300%;
     width: 100%;
 }
-.player-board > .destroyer.vertical {
+.player-board > .destroyer.vertical:nth-child(1) {
     height: 200%;
     width: 100%;
 }
