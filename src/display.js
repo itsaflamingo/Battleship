@@ -1,4 +1,5 @@
 import { ps } from "./pubsub"
+import {toggleTurn, changeAxis} from './eventlisteners.js'
 
 const generateBoard = (board) => {
     const thisBoard = document.querySelector(`.${board}`)
@@ -31,6 +32,10 @@ function display() {
 
         const title = document.createElement('h1')
         title.innerHTML = 'BATTLESHIP'
+
+        const playAgain = document.createElement('button')
+        playAgain.setAttribute('id', 'play-again')
+        playAgain.innerHTML = 'Play Again'
 
         const playerSection = document.createElement('div')
         playerSection.setAttribute('class', 'player-section')
@@ -93,6 +98,7 @@ function display() {
        
 
         header.appendChild(title)
+        header.appendChild(playAgain)
         playerSection.appendChild(playerBoard)
         playerSection.appendChild(shipSection)
         computerSection.appendChild(computerBoard)
@@ -311,5 +317,96 @@ const pushCoordinates = (obj) => {
     node.classList.add('boat')
     node.classList.add(obj.boat.boatName)
 }
+const playAgain = () => {
+    const main = document.querySelector('.main')
 
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates}
+    const removeMain = () => {
+        while (main.firstChild) {
+            main.removeChild(main.lastChild);
+        }
+    }
+
+    const newMain = () => {
+        const playerSection = document.createElement('div')
+        playerSection.setAttribute('class', 'player-section')
+        const playerBoard = document.createElement('div')
+        playerBoard.setAttribute('class', 'player-board')
+
+
+        const computerSection = document.createElement('div')
+        computerSection.setAttribute('class', 'computer-section')
+        const computerBoard = document.createElement('div')
+        computerBoard.setAttribute('class', 'computer-board')
+        
+        const shipSection = document.createElement('div')
+        shipSection.setAttribute('class', 'ship-section')
+
+        const ships = document.createElement('div')
+        ships.setAttribute('class', 'ships')
+
+        const carrier = document.createElement('div')
+        carrier.setAttribute('class', 'ship')
+        carrier.classList.add('draggable')
+        carrier.classList.add('carrier')
+        carrier.setAttribute('draggable', 'true')
+
+        const battleship = document.createElement('div')
+        battleship.setAttribute('class', 'ship') 
+        battleship.classList.add('draggable')
+        battleship.classList.add('battleship')
+        battleship.setAttribute('draggable', 'true')
+        
+        const cruiser = document.createElement('div')
+        cruiser.setAttribute('class', 'ship')
+        cruiser.classList.add('draggable')
+        cruiser.classList.add('cruiser')
+        cruiser.setAttribute('draggable', 'true')
+
+        const submarine = document.createElement('div')
+        submarine.setAttribute('class', 'ship')
+        submarine.classList.add('draggable')
+        submarine.classList.add('submarine')
+        submarine.setAttribute('draggable', 'true')
+
+        const destroyer = document.createElement('div')
+        destroyer.setAttribute('class', 'ship')
+        destroyer.classList.add('draggable')
+        destroyer.classList.add('destroyer')
+        destroyer.setAttribute('draggable', 'true')
+
+        const axis = document.createElement('button');
+        axis.setAttribute('class', 'axis')
+        axis.innerHTML = 'X'
+
+        ships.appendChild(carrier)
+        ships.appendChild(battleship)
+        ships.appendChild(cruiser)
+        ships.appendChild(submarine)
+        ships.appendChild(destroyer)
+        shipSection.appendChild(ships)
+        shipSection.appendChild(axis)
+
+        playerSection.appendChild(playerBoard)
+        playerSection.appendChild(shipSection)
+        computerSection.appendChild(computerBoard)
+
+        main.appendChild(playerSection)
+        main.appendChild(computerSection)
+    }
+
+    const rmEventListeners = () => {
+        const compTiles = document.querySelectorAll('.comp-tile')
+        const axis = document.querySelector('.axis')
+
+        compTiles.forEach((tile) => tile.removeEventListener('click', toggleTurn))
+        axis.removeEventListener('click', changeAxis)
+    }
+    
+    return {
+        removeMain,
+        newMain,
+        rmEventListeners
+    }
+}
+
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain}

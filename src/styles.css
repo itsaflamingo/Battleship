@@ -19,10 +19,12 @@ body {
     display: flex;
     gap: 1rem;
 }
+.player-section {
+    margin-left: 5rem;
+}
 .player-section, .computer-section {
     width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -36,6 +38,18 @@ body {
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 3rem;
+}
+#play-again {
+    width: 8vw;
+    height: 5vh;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+#play-again:hover {
+    background-color: black;
+    color: white;
 }
 /* Boards */
 .computer-board, .player-board {
@@ -51,14 +65,13 @@ h1 {
 /* ship-section */
 .ship-section {
     display: flex;
-    height: 20vh;
-    width: 45vw;
+    height: 47vh;
+    width: 30vw;
     margin-top: 2vh;
 }
 .ships {
     height: 100%;
-    width: 40vw;
-    border: 1px solid black;
+    width: 20vw;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -69,6 +82,11 @@ h1 {
     z-index: 10;
     background-color: orange;
     border-radius: 20px;
+}
+.axis {
+    height: 20%;
+    background-color: white;
+    border: 1px solid black;
 }
 /* boats */
 .player-board > .carrier:nth-child(1) {
@@ -177,6 +195,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
 }
 
 .boom::after,

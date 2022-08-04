@@ -1,6 +1,5 @@
 import {generateBoard} from "./display.js"
-import { Players } from "./player.js";
-import { ps } from "./pubsub.js";
+import { ps } from "./pubsub.js"
 import { Ship } from "./ship.js"
 
 const Gameboard = (playerBoat = []) => {
@@ -15,13 +14,13 @@ const Gameboard = (playerBoat = []) => {
             })
             return thisBoat
         }
-        const makeBoard = () => generateBoard('computer-board');
+        const makeBoard = () => generateBoard('computer-board') 
         
         const receiveAttack = (hitSpot) => {
-            let boat = _filterBoat(hitSpot); 
-            const name = boat.boatName;
-            const length = boat.length;
-            if(boat.boatName === undefined) return boat;
+            let boat = _filterBoat(hitSpot)  
+            const name = boat.boatName 
+            const length = boat.length 
+            if(boat.boatName === undefined) return boat 
             
             //send hit coordinates to isHit
             return Ship(name, length).isHit(hitSpot, playerBoat)
@@ -65,7 +64,7 @@ const Gameboard = (playerBoat = []) => {
             return thisBoat
         }
         const makeBoard = () => {
-            generateBoard('player-board');
+            generateBoard('player-board') 
         }
         const receiveAttack = (hitSpot) => {
             spotsTaken().playerSpotsTaken(hitSpot)
@@ -95,18 +94,18 @@ const Gameboard = (playerBoat = []) => {
     }
 
     const _filterBoat = (hitSpot) => {
-        let playerMissedShots = [];
-        let hitBoat;
+        let playerMissedShots = []
+        let hitBoat
         const boatHit = playerBoat.filter(boat => {
             boat.coordinates.forEach(num => {
                 if(num.id === hitSpot) {
-                    hitBoat = boat;
+                    hitBoat = boat
                 }
                 else {
-                    return;
+                    return
                 }
             })
-            return hitBoat === boat;
+            return hitBoat === boat 
         })
 
         if(boatHit.length === 1) {
@@ -114,13 +113,13 @@ const Gameboard = (playerBoat = []) => {
         }
         else if(boatHit.length === 0) {
             //record coordinates of missed shot
-            playerMissedShots.push(hitSpot);
+            playerMissedShots.push(hitSpot) 
             ps.publish('missed-shot', hitSpot)
-            return playerMissedShots;
+            return playerMissedShots
             //record missed shot on board
         }
 
-        return boatHit[0];
+        return boatHit[0]
 
     }
     return {
@@ -130,4 +129,95 @@ const Gameboard = (playerBoat = []) => {
     }
 }
 
-export {Gameboard};
+const ifBoatIsHit = () => {
+    const isHit = (num) => {
+        const node = document.querySelector(`#p${num}`)
+        if(node.classList.length >= 4) {
+            return node.classList[3]
+        }
+        else {
+            return undefined
+        }
+    }
+    return {
+        isHit
+    }
+}
+
+const searchForBoat = () => {
+    let isVertical = false
+    let add = true
+    let num
+
+    let obj = {
+        num,
+        newNum: 0
+    }  
+
+    const _addOne = (num) => num+1 
+    const _subtractOne = (num) => num-1 
+    const _addTen = (num) => num+10
+    const _subtractTen = (num) => num-10 
+
+    const searchVertical = (num) => {
+        let h = ifBoatIsHit()
+        if(add === true && obj.newNum === num-1) {
+            obj.newNum = _addTen(num)
+            return obj
+        }
+        else if(h.isHit(obj.newNum) !== undefined && add === true) {
+            obj.newNum = _addTen(obj.newNum)
+            return obj
+        }
+        else if(h.isHit(obj.newNum) === undefined && add === true) {
+            obj.newNum = _subtractTen(num)
+            add = false
+            return obj
+        }
+        else if(h.isHit(obj.newNum) !== undefined && add === false) {
+            obj.newNum = _subtractTen(obj.newNum)
+            return obj
+        }
+    } 
+    const searchHorizontal = (num) => {
+        let h = ifBoatIsHit()
+        if(obj.newNum === 0) {
+            obj.newNum = num
+            return obj
+        }
+        else if(h.isHit(obj.newNum) !== undefined && add === true) {
+            obj.newNum = _addOne(obj.newNum)
+            return obj
+        }
+        else if(h.isHit(obj.newNum) === undefined && add === true) {
+            obj.newNum = _subtractOne(num)
+            add = false
+            return obj
+        }
+        else if(h.isHit(obj.newNum) !== undefined && add === false) {
+            obj.newNum = _subtractOne(obj.newNum)
+            return obj
+        }
+        else if (h.isHit(obj.newNum) === undefined && add === false) {
+            isVertical = true
+            add = true
+            return ifVertical(num)
+        }
+    }
+    const reset = () => {
+        isVertical = false
+        add = true
+    }
+    const ifVertical = (num) => {
+        obj.num = num
+        return isVertical ? searchVertical(num) : searchHorizontal(num)
+    }
+    
+
+    return {
+        ifVertical,
+        reset
+    }
+}
+
+export {Gameboard, ifBoatIsHit, searchForBoat}

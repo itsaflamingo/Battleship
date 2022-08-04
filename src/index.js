@@ -1,12 +1,12 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates, playAgain} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
 import {makeShips} from './ship.js';
 import {Players} from './player.js';
 
-display();
+display()
 
 const gameLoop = () => {
 
@@ -18,8 +18,9 @@ const gameLoop = () => {
 
     const subscriptions = () => {
         const d = displayShot()
+        const p = Players(computerBoats, playerBoats)
 
-        ps.subscribe('player-turn', Players(computerBoats, playerBoats).playerTurn)
+        ps.subscribe('player-turn', p.playerTurn)
         ps.subscribe('set-location', gbp.setLocation)
         ps.subscribe('comp-set-location', gbc.setLocation)
         ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
@@ -49,18 +50,36 @@ const gameLoop = () => {
         dragAndDrop()
     }
 
+    const eventListeners = () => {
+        const playAgainBtn = document.querySelector('#play-again')
+        playAgainBtn.addEventListener('click', () => {
+            let p = playAgain()
+            p.removeMain()
+            p.newMain()
+            p.rmEventListeners()
+            const gl = gameLoop()
+            gl.subscriptions()
+            gl.makeBoards()
+            gl.setBoats()
+
+        })
+    }
+
     return {
         subscriptions, 
         setBoats,
         makeBoards,
+        eventListeners
     }
 
 }
 
-let gl = gameLoop();
-gl.subscriptions();
-gl.makeBoards();
-gl.setBoats();
+const gl = gameLoop()
+gl.subscriptions()
+gl.makeBoards()
+gl.setBoats()
+gl.eventListeners()
 
+export {gameLoop}
 
 

@@ -1,24 +1,25 @@
 import {ps} from './pubsub.js'
-import {alterShipSection, computerDisplay} from './display.js'
+import {alterShipSection} from './display.js'
     
-function click (comp, player) {
+function click () {
     const compTiles = document.querySelectorAll('.comp-tile')
     const axis = document.querySelector('.axis')
-    const c = computerDisplay();
     const a = alterShipSection();
 
-    compTiles.forEach((tile) => tile.addEventListener('click', e => {
-        const target = e.target.id;
-        if(tile.classList.length === 5) removeEventListener('click')
-        ps.publish('player-turn', target)
-        ps.publish('player-turn', target)
-        console.log(comp, player)
-    }))
-    axis.addEventListener('click', () => {
-        a.changeAxis()
-    })
+    compTiles.forEach((tile) => tile.addEventListener('click', e => toggleTurn(e)))
+    axis.addEventListener('click', () => changeAxis(a))
+}
+
+const toggleTurn = (e) => { 
+    const target = e.target.id
+    ps.publish('player-turn', target)
+    ps.publish('player-turn', target)
+}
+
+const changeAxis = (a) => {
+    a.changeAxis()
 }
 
 
-export {click}
+export {click, toggleTurn, changeAxis}
 

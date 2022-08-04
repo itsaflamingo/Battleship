@@ -10,12 +10,9 @@ function Ship (name, length) {
     }
     const _isSunk = (playerArr, thisBoat) => {
         if(thisBoat.hitSpot.length === thisBoat.length) {
-            let index = playerArr.indexOf(thisBoat);
             thisBoat.sunk = true;
-            //remove element from boats
-            playerArr.splice(index, 1);
-
-            if(playerArr.length === 0) {
+            const sunkBoats = playerArr.filter(arr => arr.sunk === true)
+            if(sunkBoats.length === 5) {
                 gameEnd();
             }
         }
