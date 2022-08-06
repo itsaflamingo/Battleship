@@ -3,22 +3,22 @@ function pubSub() {
 
     const publish = (eventName, data) => {
         if (!Array.isArray(subscribers[eventName])) {
-            return;
+            return
           }
           subscribers[eventName].forEach((callback) => {
-            console.log(callback(data));
+            callback(data)
           })
     }
     const subscribe = (eventName, callback) => {
         if (!Array.isArray(subscribers[eventName])) {
-            subscribers[eventName] = [];
+            subscribers[eventName] = []
             }
             subscribers[eventName].push(callback);
-            const index = subscribers[eventName].length-1;
+            const index = subscribers[eventName].length-1
     
             return {
                 unsubscribe() {
-                    subscribers[eventName].splice(index, 1);
+                    subscribers[eventName].splice(index, 1)
                 }
             }
     }

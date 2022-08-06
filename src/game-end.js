@@ -1,7 +1,13 @@
-import { makeShips } from "./ship";
+import {ps} from './pubsub.js'
 
 const gameEnd = (player = 'player') => {
-    console.log(`${player} wins!`);
+    if(player[0].coordinates[0].id[0] === 'c') {
+        player = 'Player'
+    }
+    else {
+        player = 'Computer'
+    }
+    ps.publish('end-msg', player)
 }
 
 export {gameEnd};

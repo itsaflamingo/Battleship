@@ -159,22 +159,51 @@ const searchForBoat = () => {
     const _addTen = (num) => num+10
     const _subtractTen = (num) => num-10 
 
+    const _ifBoom = (num) => {
+        const node = document.querySelector(`#p${num}`)
+
+        if(node.classList.contains('boom')) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     const searchVertical = (num) => {
         let h = ifBoatIsHit()
-        if(add === true && obj.newNum === num-1) {
+        if(add === true && obj.newNum === num-1 && num <= 100) {
             obj.newNum = _addTen(num)
+            if(obj.newNum > 100) {
+                obj.newNum = _subtractTen(num)
+                add = false
+            }
             return obj
         }
         else if(h.isHit(obj.newNum) !== undefined && add === true) {
             obj.newNum = _addTen(obj.newNum)
             return obj
         }
-        else if(h.isHit(obj.newNum) === undefined && add === true) {
+        else if(h.isHit(obj.newNum) !== undefined && add === true) {
+            obj.newNum = _subtractTen(obj.newNum)
+            add = false
+            return obj
+        }
+        else if(h.isHit(obj.newNum) === undefined && add === true && num >= 1) {
             obj.newNum = _subtractTen(num)
             add = false
             return obj
         }
+        else if(h.isHit(obj.newNum) === undefined && add === true && num < 1) {
+            obj.newNum = _addTen(num)
+            add = true
+            return obj
+        }
         else if(h.isHit(obj.newNum) !== undefined && add === false) {
+            obj.newNum = _subtractTen(obj.newNum)
+            return obj
+        }
+        else if(h.isHit(obj.newNum) === undefined && add === false) {
             obj.newNum = _subtractTen(obj.newNum)
             return obj
         }

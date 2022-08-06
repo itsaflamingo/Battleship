@@ -19,6 +19,9 @@ function Players(compBoats = [], playerBoats = []) {
         }
         const _sendToSearch = (num) => {
             let obj = s.ifVertical(num)
+            if(playerActiveSpots.has(obj.newNum)) {
+                obj = s.ifVertical(num)
+            }
             num = obj.newNum
             return num
         }
@@ -34,12 +37,12 @@ function Players(compBoats = [], playerBoats = []) {
             return ship.sunk
         }
         const _isSunk = () => {
-                //reset all variables in function
-                s = searchForBoat()
-                s.reset()
-                isSunk = false
-                boatCoordinate = 0
-                return _randomNum()
+            //reset all variables in function
+            s = searchForBoat()
+            s.reset()
+            isSunk = false
+            boatCoordinate = 0
+            return _randomNum()
         }
         const _checkIfHit = () => {
             if(boatCoordinate === 0 || isSunk === true) {
@@ -54,7 +57,7 @@ function Players(compBoats = [], playerBoats = []) {
             }
             //returns object
             bool = ifBoatIsHit().isHit(num, playerBoats)
-            if(bool !== undefined) {
+            if(bool !== undefined && !playerActiveSpots.has(num)) {
                 boatCoordinate = _nextNum(num).newNum
                 return boatCoordinate
             }

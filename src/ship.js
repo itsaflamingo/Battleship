@@ -5,23 +5,23 @@ function Ship (name, length) {
 
     const isHit = (hit, playerArr) => {
         let thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName)
-        thisBoat[0].hitSpot.push(hit);
-        return _isSunk(playerArr, thisBoat[0]);
+        thisBoat[0].hitSpot.push(hit)
+        return _isSunk(playerArr, thisBoat[0])
     }
     const _isSunk = (playerArr, thisBoat) => {
         if(thisBoat.hitSpot.length === thisBoat.length) {
-            thisBoat.sunk = true;
+            thisBoat.sunk = true
             const sunkBoats = playerArr.filter(arr => arr.sunk === true)
             if(sunkBoats.length === 5) {
-                gameEnd();
+                gameEnd(playerArr)
             }
         }
         return thisBoat;
     }
     const shipLocation = (location = [], playerArr = []) => {
-        let thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName);
-        thisBoat[0].coordinates = location;
-        return thisBoat[0];        
+        let thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName)
+        thisBoat[0].coordinates = location
+        return thisBoat[0]    
     }
 
     const boat = {

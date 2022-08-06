@@ -37,6 +37,9 @@ function display() {
         playAgain.setAttribute('id', 'play-again')
         playAgain.innerHTML = 'Play Again'
 
+        const dispMessage = document.createElement('div')
+        dispMessage.setAttribute('id', 'msg')
+
         const playerSection = document.createElement('div')
         playerSection.setAttribute('class', 'player-section')
         const playerBoard = document.createElement('div')
@@ -99,6 +102,7 @@ function display() {
 
         header.appendChild(title)
         header.appendChild(playAgain)
+        header.appendChild(dispMessage)
         playerSection.appendChild(playerBoard)
         playerSection.appendChild(shipSection)
         computerSection.appendChild(computerBoard)
@@ -297,12 +301,10 @@ const alterShipSection = () => {
 const displayShot = () => {
     const shotMissed = (spot) => {
         const target = document.querySelector(`#${spot}`)
-        console.log('miss', spot, target)
         target.classList.add('miss')
     }
     const shotHit = (spot) => {
         const target = document.querySelector(`#${spot}`)
-        console.log('hit', spot, target)
         target.classList.add('boom')
     }
     
@@ -408,5 +410,9 @@ const playAgain = () => {
         rmEventListeners
     }
 }
+const winMsg = (player) => {
+    const msg = document.querySelector('#msg')
+    msg.innerHTML = `${player} Wins!`
+}
 
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain}
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain, winMsg}
