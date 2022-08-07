@@ -44,17 +44,7 @@ function Players(compBoats = [], playerBoats = []) {
             boatCoordinate = 0
             return _randomNum()
         }
-        const _checkIfHit = () => {
-            if(boatCoordinate === 0 || isSunk === true) {
-                num = _randomNum()
-            }
-            else {
-                isSunk = _checkIfSunk(bool)
-                if(isSunk === true) {
-                    return _isSunk()
-                }
-                return _sendToSearch(num)
-            }
+        const _checkIfHit = (num) => {
             //returns object
             bool = ifBoatIsHit().isHit(num, playerBoats)
             if(bool !== undefined && !playerActiveSpots.has(num)) {
@@ -65,8 +55,22 @@ function Players(compBoats = [], playerBoats = []) {
                 return num
             }
         }
+        const _returnNum = () => {
+            if(boatCoordinate === 0 || isSunk === true) {
+                num = _randomNum()
+            }
+            else {
+                isSunk = _checkIfSunk(bool)
+                if(isSunk === true) {
+                    num = _isSunk()
+                    return _checkIfHit(num)
+                }
+                return _sendToSearch(num)
+            }
+            return _checkIfHit(num)
+        }
         const getAttackCoordinate = () => {
-            let num = _checkIfHit()
+            let num = _returnNum()
             playerActiveSpots.add(num)
             return num
         }
