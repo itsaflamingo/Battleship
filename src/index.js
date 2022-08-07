@@ -20,20 +20,40 @@ const gameLoop = () => {
         const d = displayShot()
         const p = Players(computerBoats, playerBoats)
 
-        ps.subscribe('player-turn', p.playerTurn)
-        ps.subscribe('set-location', gbp.setLocation)
-        ps.subscribe('comp-set-location', gbc.setLocation)
-        ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
-        ps.subscribe('missed-shot', d.shotMissed)
-        ps.subscribe('hit-shot', d.shotHit)
-        ps.subscribe('push-coordinates', pushCoordinates)
-        ps.subscribe('end-msg', winMsg)
+        const sub = () => {
+            ps.subscribe('player-turn', p.playerTurn)
+            ps.subscribe('set-location', gbp.setLocation)
+            ps.subscribe('comp-set-location', gbc.setLocation)
+            ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
+            ps.subscribe('missed-shot', d.shotMissed)
+            ps.subscribe('hit-shot', d.shotHit)
+            ps.subscribe('push-coordinates', pushCoordinates)
+            ps.subscribe('end-msg', winMsg)
+        }
+        
+
+        const unsub = () => {
+            ps.subscribe('player-turn', p.playerTurn).unsubscribe()
+            ps.subscribe('set-location', gbp.setLocation).unsubscribe()
+            ps.subscribe('comp-set-location', gbc.setLocation).unsubscribe()
+            ps.subscribe('set-player-ships', makeBoats().setPlayerShips).unsubscribe()
+            ps.subscribe('missed-shot', d.shotMissed).unsubscribe()
+            ps.subscribe('hit-shot', d.shotHit).unsubscribe()
+            ps.subscribe('push-coordinates', pushCoordinates).unsubscribe()
+            ps.subscribe('end-msg', winMsg).unsubscribe()
+        }
+        return {
+            sub,
+            unsub
+        }
     }
     
     const makeBoards = () => {
         gbp.makeBoard()
         gbc.makeBoard()
+    }
 
+    const setClick = () => {
         click(computerBoats, playerBoats)
     }
 
@@ -59,8 +79,9 @@ const gameLoop = () => {
             p.newMain()
             p.rmEventListeners()
             const gl = gameLoop()
-            gl.subscriptions()
+            gl.subscriptions().unsub()
             gl.makeBoards()
+            gl.setClick()
             gl.setBoats()
 
         })
@@ -70,14 +91,16 @@ const gameLoop = () => {
         subscriptions, 
         setBoats,
         makeBoards,
+        setClick,
         eventListeners
     }
 
 }
 
 const gl = gameLoop()
-gl.subscriptions()
+gl.subscriptions().sub()
 gl.makeBoards()
+gl.setClick()
 gl.setBoats()
 gl.eventListeners()
 

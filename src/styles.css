@@ -146,7 +146,7 @@ h1 {
 .draggable.dragging {
     opacity: .5;
 }
-.boat {
+.player-board > .boat {
     background-color: orange;
 }
 .xy-btns {
