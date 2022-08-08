@@ -246,6 +246,7 @@ const dragAndDrop = () => {
             }
             const numId = draggable.id
             const num = numId.slice(1, 3)
+
             ps.publish('set-location', {
                 boat,
                 num,
@@ -264,9 +265,11 @@ const dragAndDrop = () => {
         const target = e.target
 
         if(target === null) return
-        
         draggable.setAttribute('id', target.previousSibling.id)
         playerBoard.insertBefore(draggable, target.previousSibling)
+        
+        
+        
     })
 }
 const alterShipSection = () => {
@@ -297,6 +300,35 @@ const alterShipSection = () => {
         isFinished
     }
     
+}
+const checkBoatLength = (num, boat) => {
+    let length
+    const firstDigit = num.slice(1, 2)
+    
+    switch(boat) {
+        case 'carrier':
+            length = 5
+            break
+        case 'battleship': 
+            length = 4
+            break
+        case 'submarine':
+           length = 3
+            break
+        case 'cruiser': 
+            length = 3
+            break
+        case 'destroyer': 
+            length = 2
+            break
+    }
+    //ex. if 23 < firstDigit*10 (20) + length (5) = 28
+    if(num < firstDigit*10 + length) {
+        return true
+    }
+    else {
+        return false
+    }
 }
 const displayShot = () => {
     const shotMissed = (spot) => {
@@ -410,9 +442,34 @@ const playAgain = () => {
         rmEventListeners
     }
 }
+const shipSunkMsg = () => {
+    const msg = document.querySelector('#msg')
+
+    const selectPlayer = (location) => {
+        const player = location.id
+        if(player.includes('p') === true) {
+            ps.publish('player-ship-sunk', location.classList[3])
+        }
+        else if(player.includes('c') === true) {
+            ps.publish('comp-ship-sunk', location.classList[3])
+        }
+    }
+
+    const playerSunkShip = (ship) => {
+        msg.innerHTML = `Your ${ship} has been sunk!`
+    }
+    const compSunkShip = (ship) => {
+        msg.innerHTML = `You have sunk your opponent's ${ship}!`
+    }
+
+    return {
+        selectPlayer,
+        playerSunkShip,
+        compSunkShip
+    }
+}
 const winMsg = (player) => {
     const msg = document.querySelector('#msg')
     msg.innerHTML = `${player} Wins!`
 }
-
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain, winMsg}
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain, shipSunkMsg, winMsg}

@@ -1,5 +1,5 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates, playAgain, winMsg} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates, playAgain, winMsg, shipSunkMsg, boatSunkMsg} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
@@ -19,6 +19,7 @@ const gameLoop = () => {
     const subscriptions = () => {
         const d = displayShot()
         const p = Players(computerBoats, playerBoats)
+        const s = shipSunkMsg()
 
         const sub = () => {
             ps.subscribe('player-turn', p.playerTurn)
@@ -29,6 +30,9 @@ const gameLoop = () => {
             ps.subscribe('hit-shot', d.shotHit)
             ps.subscribe('push-coordinates', pushCoordinates)
             ps.subscribe('end-msg', winMsg)
+            ps.subscribe('boat-sunk-msg', s.selectPlayer)
+            ps.subscribe('player-ship-sunk', s.playerSunkShip)
+            ps.subscribe('comp-ship-sunk', s.compSunkShip)
         }
         
 
@@ -41,6 +45,8 @@ const gameLoop = () => {
             ps.subscribe('hit-shot', d.shotHit).unsubscribe()
             ps.subscribe('push-coordinates', pushCoordinates).unsubscribe()
             ps.subscribe('end-msg', winMsg).unsubscribe()
+            ps.subscribe('player-ship-sunk', s.playerSunkShip).unsubscribe()
+            ps.subscribe('comp-ship-sunk', s.compSunkShip).unsubscribe()
         }
         return {
             sub,
