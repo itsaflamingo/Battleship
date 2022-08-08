@@ -26,6 +26,9 @@ body {
 .player-section {
     margin-left: 5rem;
 }
+.computer-section {
+    margin-right: 5rem;
+}
 .player-section, .computer-section {
     width: 100%;
     display: flex;
@@ -73,7 +76,6 @@ h1 {
     align-items: center;
     height: 20vh;
     width: 15vw;
-    border: 1px solid black;
     margin-top: 2vh;
     margin-left: 1rem;
 }
@@ -95,6 +97,10 @@ h1 {
     height: 100%;
     background-color: white;
     border: 1px solid black;
+}
+.axis:hover {
+    background-color: black;
+    color: white;
 }
 /* boats */
 .player-board > .carrier:nth-child(1) {

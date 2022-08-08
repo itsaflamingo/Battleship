@@ -45,6 +45,7 @@ const gameLoop = () => {
             ps.subscribe('hit-shot', d.shotHit).unsubscribe()
             ps.subscribe('push-coordinates', pushCoordinates).unsubscribe()
             ps.subscribe('end-msg', winMsg).unsubscribe()
+            ps.subscribe('boat-sunk-msg', s.selectPlayer).unsubscribe()
             ps.subscribe('player-ship-sunk', s.playerSunkShip).unsubscribe()
             ps.subscribe('comp-ship-sunk', s.compSunkShip).unsubscribe()
         }
