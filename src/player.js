@@ -10,10 +10,10 @@ function Players(compBoats = [], playerBoats = []) {
     let isSunk = false
 
     const Computer = () => {
-        const _randomNum = () => {
+        const randomNum = () => {
             num = Math.floor(Math.random() * (100-1) + 1)
             if(playerActiveSpots.has(num)) {
-                return _randomNum()
+                return randomNum()
             }
             return num
         }
@@ -42,7 +42,7 @@ function Players(compBoats = [], playerBoats = []) {
             s.reset()
             isSunk = false
             boatCoordinate = 0
-            return _randomNum()
+            return randomNum()
         }
         const _checkIfHit = (num) => {
             //returns object
@@ -57,7 +57,7 @@ function Players(compBoats = [], playerBoats = []) {
         }
         const _returnNum = () => {
             if(boatCoordinate === 0 || isSunk === true) {
-                num = _randomNum()
+                num = randomNum()
             }
             else {
                 isSunk = _checkIfSunk(bool)
@@ -79,13 +79,14 @@ function Players(compBoats = [], playerBoats = []) {
         }
         isPlayer = true
         return {
+            randomNum,
             sendAttack,
             getAttackCoordinate,
         }
     }
     const Player = () => {
         const playerAttack = (target) => {
-            Gameboard(compBoats).ComputerBoard().receiveAttack(target)
+            return Gameboard(compBoats).ComputerBoard().receiveAttack(target)
         }
         isPlayer = false;
         return {

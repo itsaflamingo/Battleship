@@ -12,7 +12,7 @@ test('Player returns coordinate', () => {
     expect(Players().playerTurn('c23')).toMatchObject(['c23']);
 })
 test('Computer attack is not undefined or null', () => {
-    let num = Players().Computer().randomNum();
-    expect(Players().Computer().compAttack(num)).not.toBeNull();
-    expect(Players().Computer().compAttack(num)).not.toBeUndefined();
+    const p = Players()
+    expect(p.Computer().sendAttack(p.Computer().randomNum())).not.toBeNull();
+    expect(p.Computer().sendAttack(p.Computer().randomNum())).not.toBeUndefined();
 })

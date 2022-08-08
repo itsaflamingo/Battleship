@@ -159,17 +159,6 @@ const searchForBoat = () => {
     const _addTen = (num) => num+10
     const _subtractTen = (num) => num-10 
 
-    const _ifBoom = (num) => {
-        const node = document.querySelector(`#p${num}`)
-
-        if(node.classList.contains('boom')) {
-            return true
-        }
-        else {
-            return false
-        }
-    }
-
     const searchVertical = (num) => {
         let h = ifBoatIsHit()
         if(add === true && obj.newNum === num-1 && num <= 100) {
