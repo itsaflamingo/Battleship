@@ -1,6 +1,7 @@
 # battleship
 
 Link to game: https://itsaflamingo.github.io/battleship/
+
 Assignment instructions: https://www.theodinproject.com/lessons/node-path-javascript-battleship
 
 This assignment was meant as practice in our use of Test-Driven Development. This was definitely the greatest challenge for me, and a skill I will continue to practice. 
