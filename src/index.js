@@ -1,5 +1,5 @@
 import './styles.css';
-import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, pushCoordinates, playAgain, winMsg, shipSunkMsg, boatSunkMsg} from './display.js';
+import {display, makeBoats, dragAndDrop, computerDisplay, displayShot, playAgain, winMsg, shipSunkMsg} from './display.js';
 import {Gameboard} from './gameboard.js';
 import {ps} from './pubsub.js';
 import {click} from './eventlisteners.js';
@@ -10,16 +10,16 @@ display()
 
 const gameLoop = () => {
 
-    let computerBoats = makeShips().computerBoats;
-    let playerBoats = makeShips().playerBoats;    
+    let computerBoats = makeShips().createShipArray().computerBoats;
+    let playerBoats = makeShips().createShipArray().playerBoats;    
 
     const gbp = Gameboard(playerBoats).PlayerBoard();
     const gbc = Gameboard (computerBoats).ComputerBoard();
 
     const subscriptions = () => {
-        const d = displayShot()
-        const p = Players(computerBoats, playerBoats)
-        const s = shipSunkMsg()
+        const d = displayShot();
+        const p = Players(computerBoats, playerBoats);
+        const s = shipSunkMsg();
 
         const sub = () => {
             ps.subscribe('player-turn', p.playerTurn)
@@ -28,7 +28,6 @@ const gameLoop = () => {
             ps.subscribe('set-player-ships', makeBoats().setPlayerShips)
             ps.subscribe('missed-shot', d.shotMissed)
             ps.subscribe('hit-shot', d.shotHit)
-            ps.subscribe('push-coordinates', pushCoordinates)
             ps.subscribe('end-msg', winMsg)
             ps.subscribe('boat-sunk-msg', s.selectPlayer)
             ps.subscribe('player-ship-sunk', s.playerSunkShip)
@@ -43,7 +42,6 @@ const gameLoop = () => {
             ps.subscribe('set-player-ships', makeBoats().setPlayerShips).unsubscribe()
             ps.subscribe('missed-shot', d.shotMissed).unsubscribe()
             ps.subscribe('hit-shot', d.shotHit).unsubscribe()
-            ps.subscribe('push-coordinates', pushCoordinates).unsubscribe()
             ps.subscribe('end-msg', winMsg).unsubscribe()
             ps.subscribe('boat-sunk-msg', s.selectPlayer).unsubscribe()
             ps.subscribe('player-ship-sunk', s.playerSunkShip).unsubscribe()

@@ -6,7 +6,6 @@ const generateBoard = (board) => {
 
     for(let i=1; i<=100; i++) {
         const div = document.createElement('div')
-        div.classList.add('draggable')
         let a = ''
         if(board === 'player-board'){
             div.classList.add('player-tile')
@@ -21,100 +20,117 @@ const generateBoard = (board) => {
         thisBoard.appendChild(div)
     }
 }
+
 function display() {
-        const body = document.querySelector('body')
-        const container = document.createElement('div')
-        container.setAttribute('class', 'container')
-        const header = document.createElement('div')
-        header.setAttribute('class', 'header')
-        const main = document.createElement('div')
-        main.setAttribute('class', 'main')
+        const body = document.querySelector('body');
+        const container = document.createElement('div');
+        container.setAttribute('class', 'container');
+        const header = document.createElement('div');
+        header.setAttribute('class', 'header');
+        const main = document.createElement('div');
+        main.setAttribute('class', 'main');
 
-        const title = document.createElement('h1')
-        title.innerHTML = 'BATTLESHIP'
+        const title = document.createElement('h1');
+        title.innerHTML = 'BATTLESHIP';
 
-        const playAgain = document.createElement('button')
-        playAgain.setAttribute('id', 'play-again')
-        playAgain.innerHTML = 'Play Again'
+        const playAgain = document.createElement('button');
+        playAgain.setAttribute('id', 'play-again');
+        playAgain.innerHTML = 'Play Again';
 
-        const dispMessage = document.createElement('div')
-        dispMessage.setAttribute('id', 'msg')
+        const dispMessage = document.createElement('div');
+        dispMessage.setAttribute('id', 'msg');
 
-        const playerSection = document.createElement('div')
-        playerSection.setAttribute('class', 'player-section')
-        const playerBoard = document.createElement('div')
-        playerBoard.setAttribute('class', 'player-board')
+        const playerSection = document.createElement('div');
+        playerSection.setAttribute('class', 'player-section');
+        const playerBoard = document.createElement('div');
+        playerBoard.setAttribute('class', 'player-board');
 
 
-        const computerSection = document.createElement('div')
-        computerSection.setAttribute('class', 'computer-section')
-        const computerBoard = document.createElement('div')
-        computerBoard.setAttribute('class', 'computer-board')
+        const computerSection = document.createElement('div');
+        computerSection.setAttribute('class', 'computer-section');
+        const computerBoard = document.createElement('div');
+        computerBoard.setAttribute('class', 'computer-board');
         
-        const shipSection = document.createElement('div')
-        shipSection.setAttribute('class', 'ship-section')
+        const shipSection = document.createElement('div');
+        shipSection.setAttribute('class', 'ship-section');
 
-        const ships = document.createElement('div')
-        ships.setAttribute('class', 'ships')
+        const ships = document.createElement('div');
+        ships.setAttribute('class', 'ships');
 
-        const carrier = document.createElement('div')
-        carrier.setAttribute('class', 'ship')
-        carrier.classList.add('draggable')
-        carrier.classList.add('carrier')
-        carrier.setAttribute('draggable', 'true')
+        const carrier = document.createElement('div');
+        carrier.setAttribute('class', 'ship');
+        carrier.setAttribute('id', 'carrier');
+        carrier.setAttribute('draggable', 'true');
 
-        const battleship = document.createElement('div')
-        battleship.setAttribute('class', 'ship') 
-        battleship.classList.add('draggable')
-        battleship.classList.add('battleship')
-        battleship.setAttribute('draggable', 'true')
+        _addBoats(5, carrier, 'carrier');
+
+        const battleship = document.createElement('div');
+        battleship.setAttribute('class', 'ship');
+        battleship.setAttribute('id', 'battleship');
+        battleship.setAttribute('draggable', 'true');
+
+        _addBoats(4, battleship, 'battleship');
         
-        const cruiser = document.createElement('div')
-        cruiser.setAttribute('class', 'ship')
-        cruiser.classList.add('draggable')
-        cruiser.classList.add('cruiser')
-        cruiser.setAttribute('draggable', 'true')
+        const cruiser = document.createElement('div');
+        cruiser.setAttribute('class', 'ship');
+        cruiser.setAttribute('id', 'cruiser');
+        cruiser.setAttribute('draggable', 'true');
 
-        const submarine = document.createElement('div')
-        submarine.setAttribute('class', 'ship')
-        submarine.classList.add('draggable')
-        submarine.classList.add('submarine')
-        submarine.setAttribute('draggable', 'true')
+        _addBoats(3, cruiser, 'cruiser');
+    
+        const submarine = document.createElement('div');
+        submarine.setAttribute('class', 'ship');
+        submarine.setAttribute('id', 'submarine');
+        submarine.setAttribute('draggable', 'true');
 
-        const destroyer = document.createElement('div')
-        destroyer.setAttribute('class', 'ship')
-        destroyer.classList.add('draggable')
-        destroyer.classList.add('destroyer')
-        destroyer.setAttribute('draggable', 'true')
+        _addBoats(3, submarine, 'submarine');
+
+        const destroyer = document.createElement('div');
+        destroyer.setAttribute('class', 'ship');
+        destroyer.setAttribute('id', 'destroyer');
+        destroyer.setAttribute('draggable', 'true');
+
+        _addBoats(2, destroyer, 'destroyer')
 
         const axis = document.createElement('button');
-        axis.setAttribute('class', 'axis')
-        axis.innerHTML = 'X'
+        axis.setAttribute('class', 'axis');
+        axis.innerHTML = 'X';
 
-        ships.appendChild(carrier)
-        ships.appendChild(battleship)
-        ships.appendChild(cruiser)
-        ships.appendChild(submarine)
-        ships.appendChild(destroyer)
-        shipSection.appendChild(ships)
-        shipSection.appendChild(axis)
+        ships.appendChild(carrier);
+        ships.appendChild(battleship);
+        ships.appendChild(cruiser);
+        ships.appendChild(submarine);
+        ships.appendChild(destroyer);
+        shipSection.appendChild(ships);
+        shipSection.appendChild(axis);
        
 
-        header.appendChild(title)
-        header.appendChild(playAgain)
-        header.appendChild(dispMessage)
-        playerSection.appendChild(playerBoard)
-        playerSection.appendChild(shipSection)
-        computerSection.appendChild(computerBoard)
+        header.appendChild(title);
+        header.appendChild(playAgain);
+        header.appendChild(dispMessage);
+        playerSection.appendChild(playerBoard);
+        computerSection.appendChild(computerBoard);
 
-        main.appendChild(playerSection)
-        main.appendChild(computerSection)
+        main.appendChild(playerSection);
+        main.appendChild(computerSection);
 
-        container.appendChild(header)
-        container.appendChild(main)
+        container.appendChild(header);
+        container.appendChild(main);
+        container.appendChild(shipSection);
 
-        body.appendChild(container)
+        body.appendChild(container);
 }
+
+const _addBoats = (length, boat, name) => {
+    for(let i = 0; i < length; i++) {
+        const innerBoat = document.createElement('div');
+        innerBoat.classList.add('draggable');
+        innerBoat.classList.add(`${name}`);
+
+        boat.appendChild(innerBoat);
+    }
+}
+
 const makeBoats = () => {
     
     const setComputerShips = (boat, array) => {
@@ -132,17 +148,19 @@ const makeBoats = () => {
 
     const setPlayerShips = (boat) => {
         boat.coordinates.forEach(spot => {
-            if(spot.classList.length <= 2) {
+            if(spot.classList.length <= 3) {
                 spot.classList.add(boat.boatName)
                 spot.classList.add('player-tile')
             }
         })
     }
+
     return {
         setComputerShips,
         setPlayerShips
     }
 }
+
 const computerDisplay = () => {
     const compBoard = document.querySelector('.computer-board')
 
@@ -226,67 +244,189 @@ const computerDisplay = () => {
 
     }
 }
+
 const dragAndDrop = () => {
-    const draggables = document.querySelectorAll('.draggable')
-    const playerBoard = document.querySelector('.player-board')
+    const playerBoard = document.querySelector('.player-board');
+    const ships = document.querySelectorAll('.ship');
+    const tiles = document.querySelectorAll('.player-tile');
 
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', () => {
-            //add dragging class to entire boat
-            draggable.classList.add('dragging')
-        })
-        draggable.addEventListener('dragend', e => {
-            //remove dragging class from entire boat
-            draggable.classList.remove('dragging')
-            const ships = document.querySelector('.ships').childElementCount
-            const boat = e.target.classList[2]
-            let isVertical = false
-            if(draggable.classList.contains('vertical')) {
-                isVertical = true
-            }
-            const numId = draggable.id
-            const num = numId.slice(1, 3)
-
-            ps.publish('set-location', {
-                boat,
-                num,
-                isVertical,
-            })
-            draggable.remove()
-
-            if(ships === 0) alterShipSection().isFinished()
-        })
+    ships.forEach(ship => {
+        ship.addEventListener('dragstart', (e) => handleDragStart(e));
+        ship.addEventListener('dragend', (e) => handleDragEnd(e));
     })
 
-    playerBoard.addEventListener('dragover', e => {
-        //removes default state of not being able to drop
-        e.preventDefault()
-        const draggable = document.querySelector('.dragging')
-        const target = e.target
-
-        if(target === null) return
-        draggable.setAttribute('id', target.previousSibling.id)
-        playerBoard.insertBefore(draggable, target.previousSibling)
-        
-        
-        
-    })
+    tiles.forEach( tile => tile.addEventListener('dragleave', e => handleDragLeave(e)))
+    playerBoard.addEventListener('dragover', e => dragOverHandler(e));
+    playerBoard.addEventListener('drop', (e) => dropHandler(e, playerBoard));
 }
+
+function checkVertical(boat) {
+    if(boat.classList.contains('Y')) return true;
+    return false;
+}
+
+function handleDragStart(e) {
+    const target = e.target;
+    const children = target.children;
+    [...children].forEach(child => {
+        child.classList.add('dragging');
+        child.classList.add('placed');
+    });
+}
+
+function handleDragLeave(e) {
+    const dragging = document.querySelectorAll('.dragging');
+    const target = e.target;
+    const isVertical = checkVertical(dragging[0]);
+    const length = dragging.length;
+    const id = target.id.slice(1);
+
+    target.style.opacity = '1'
+
+    if(isVertical === false) {
+        for(let i = 1; i < length; i++) {
+            const selectNext = parseInt(id) + i;
+            const nextDiv = document.querySelector(`#p${selectNext}`)
+            nextDiv.style.opacity = '1';
+        }
+    }
+    else if(isVertical === true) {
+        for(let i = 1; i < length; i++) {
+            const selectNext = parseInt(id) + (10*i);
+            if(selectNext > 100) return;
+            const nextDiv = document.querySelector(`#p${selectNext}`)
+            nextDiv.style.opacity = '1';
+        }
+    }
+
+}
+
+function handleDragEnd(e) {
+    e.preventDefault();
+    const target = e.target;
+    target.style.opacity='1';
+}
+
+function dragOverHandler(e) {
+    //removes default state not allowing drops
+    e.preventDefault();
+    const dragging = document.querySelectorAll('.dragging');
+    const target = e.target;
+    const isVertical = checkVertical(dragging[0]);
+    const id = target.id.slice(1);
+    const length = dragging.length;
+
+    target.style.opacity = '0.4';
+
+    if(isVertical === false) {
+        for(let i=1; i<length; i++) {
+            if(isNaN(id)) return;
+            const right = parseInt(id) + i;
+            const highlight = document.querySelector(`#p${right}`);
+            highlight.style.opacity = '0.4';
+        }  
+    }
+    else if(isVertical === true) {
+        for(let i=1; i<length; i++) {
+            if(isNaN(id)) return;
+            const bottom = parseInt(id) + (10 * i);
+            if(bottom > 100) return;
+            const highlight = document.querySelector(`#p${bottom}`);
+            highlight.style.opacity = '0.4';
+        }  
+    }
+}
+
+const labelBoatEmpty = (boatName) => {
+    const boatHolder = document.querySelector(`#${boatName}`)
+    boatHolder.classList.add('empty');
+}
+
+function replaceChildren(e, board, vertical) {
+    const dragging = document.querySelectorAll('.dragging');
+    let target = e.target;
+    const id = target.id.slice(1);
+    const length = dragging.length;
+    const coordinates = [];
+    
+    if(vertical === false) {
+        for(let i=0; i<length; i++) {
+            const child = dragging[i];
+            child.classList.remove('dragging');
+            child.setAttribute('id', target.id);
+            coordinates.push({id: target.id});
+            const nextSibling = target.nextSibling;
+            board.replaceChild(child, target);
+            target = nextSibling;
+        }
+    }
+    else if(vertical === true) {
+        for(let i=1; i<=length; i++) {
+            const child = dragging[i-1];
+            child.classList.remove('dragging');
+            child.classList.remove('Y');
+            child.setAttribute('id', target.id);
+            coordinates.push({id: target.id});
+            const nextNode = parseInt(id) + (10*i);
+            const nextSibling = document.querySelector(`#p${nextNode}`);
+            board.replaceChild(child, target);
+            target = nextSibling;
+        }
+    }
+
+    return coordinates;
+}
+
+function dropHandler(e, board) {
+    e.preventDefault();
+    const dragging = document.querySelectorAll('.dragging');
+    const boat = dragging[0];
+    const name = boat.classList[1]; 
+    const isVertical = checkVertical(boat);
+    
+    const target = e.target;
+    target.style.opacity = '1';
+
+    const coordinates = replaceChildren(e, board, isVertical);
+    labelBoatEmpty(name);
+
+    // keep track of number of ships within ship storing div
+    const emptyShips = document.querySelectorAll('.empty');
+  
+    const numId = boat.id;
+    const num = numId.slice(1, 3);
+
+    ps.publish('set-location', {
+        name,
+        num,
+        isVertical,
+        coordinates
+    })
+
+    if(emptyShips.length === 5) alterShipSection().isFinished();
+}
+
 const alterShipSection = () => {
 
     const changeAxis = () => {
         const ships = document.querySelectorAll('.ships > .ship')
         const button = document.querySelector('.axis')
 
-        ships.forEach(ship => {
-            ship.classList.toggle('vertical')
+        const flip = (ship) => {
+            ship.classList.toggle('vertical');
+
+            const children = ship.children;
+            [...children].forEach(child => child.classList.toggle('Y'));
+            
             if(ship.classList.contains('vertical')) {
                 button.innerHTML = 'Y'
             }
             else {
                 button.innerHTML = 'X'
             }
-        })
+        }        
+
+        ships.forEach(ship => flip(ship))
     }
 
     const isFinished = () => {
@@ -301,43 +441,16 @@ const alterShipSection = () => {
     }
     
 }
-const checkBoatLength = (num, boat) => {
-    let length
-    const firstDigit = num.slice(1, 2)
-    
-    switch(boat) {
-        case 'carrier':
-            length = 5
-            break
-        case 'battleship': 
-            length = 4
-            break
-        case 'submarine':
-           length = 3
-            break
-        case 'cruiser': 
-            length = 3
-            break
-        case 'destroyer': 
-            length = 2
-            break
-    }
-    //ex. if 23 < firstDigit*10 (20) + length (5) = 28
-    if(num < firstDigit*10 + length) {
-        return true
-    }
-    else {
-        return false
-    }
-}
+
 const displayShot = () => {
     const shotMissed = (spot) => {
-        const target = document.querySelector(`#${spot}`)
-        target.classList.add('miss')
+        console.log(spot);
+        const target = document.querySelector(`#${spot}`);
+        target.classList.add('miss');
     }
     const shotHit = (spot) => {
-        const target = document.querySelector(`#${spot}`)
-        target.classList.add('boom')
+        const target = document.querySelector(`#${spot}`);
+        target.classList.add('boom');
     }
     
     return {
@@ -345,12 +458,7 @@ const displayShot = () => {
         shotHit
     }
 }
-const pushCoordinates = (obj) => {
-    const node = document.querySelector(`#p${obj.i}`)
-    obj.boat.coordinates.push(node)
-    node.classList.add('boat')
-    node.classList.add(obj.boat.boatName)
-}
+
 const playAgain = () => {
     const main = document.querySelector('.main')
 
@@ -366,14 +474,10 @@ const playAgain = () => {
         const playerBoard = document.createElement('div')
         playerBoard.setAttribute('class', 'player-board')
 
-
         const computerSection = document.createElement('div')
         computerSection.setAttribute('class', 'computer-section')
         const computerBoard = document.createElement('div')
         computerBoard.setAttribute('class', 'computer-board')
-        
-        const shipSection = document.createElement('div')
-        shipSection.setAttribute('class', 'ship-section')
 
         const ships = document.createElement('div')
         ships.setAttribute('class', 'ships')
@@ -417,11 +521,8 @@ const playAgain = () => {
         ships.appendChild(cruiser)
         ships.appendChild(submarine)
         ships.appendChild(destroyer)
-        shipSection.appendChild(ships)
-        shipSection.appendChild(axis)
 
         playerSection.appendChild(playerBoard)
-        playerSection.appendChild(shipSection)
         computerSection.appendChild(computerBoard)
 
         main.appendChild(playerSection)
@@ -447,11 +548,12 @@ const shipSunkMsg = () => {
 
     const selectPlayer = (location) => {
         const player = location.id
+        const node = document.querySelector(`#${player}`);
         if(player.includes('p') === true) {
-            ps.publish('player-ship-sunk', location.classList[3])
+            ps.publish('player-ship-sunk', node.classList[1]);
         }
         else if(player.includes('c') === true) {
-            ps.publish('comp-ship-sunk', location.classList[3])
+            ps.publish('comp-ship-sunk', node.classList[1]);
         }
     }
 
@@ -468,8 +570,9 @@ const shipSunkMsg = () => {
         compSunkShip
     }
 }
+
 const winMsg = (player) => {
     const msg = document.querySelector('#msg')
     msg.innerHTML = `${player} Wins!`
 }
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, pushCoordinates, playAgain, shipSunkMsg, winMsg}
+export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, playAgain, shipSunkMsg, winMsg}

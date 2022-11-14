@@ -1,13 +1,15 @@
-import {Gameboard, ifBoatIsHit, searchForBoat} from './gameboard.js'
+import { Gameboard, ifBoatIsHit, searchForBoat } from './gameboard.js'
+import { makeShips } from './ship'
 
 function Players(compBoats = [], playerBoats = []) {
-    let isPlayer = true
-    const playerActiveSpots = new Set()
-    let boatCoordinate = 0
-    let num = 0
-    let bool = false
-    let s = searchForBoat()
-    let isSunk = false
+    let isPlayer = true;
+    const playerActiveSpots = new Set();
+    let boatCoordinate = 0;
+    let num = 0;
+    let bool = false;
+    let s = searchForBoat();
+    let isSunk = false;
+    const allCoordinates = makeShips().allLocations();
 
     const Computer = () => {
         const randomNum = () => {
@@ -26,6 +28,7 @@ function Players(compBoats = [], playerBoats = []) {
             return num
         }
         const _nextNum = (num) => s.ifVertical(num)
+
         const _checkIfSunk = (boatName) => {
             let ship = {}
             playerBoats.forEach(boat => {
@@ -36,47 +39,52 @@ function Players(compBoats = [], playerBoats = []) {
             if(ship === {}) ship.sunk = false
             return ship.sunk
         }
-        const _isSunk = () => {
+        const _whenSunk = () => {
             //reset all variables in function
-            s = searchForBoat()
-            s.reset()
-            isSunk = false
-            boatCoordinate = 0
+            s = searchForBoat();
+            s.reset();
+            isSunk = false;
+            boatCoordinate = 0;
             return randomNum()
         }
         const _checkIfHit = (num) => {
             //returns object
-            bool = ifBoatIsHit().isHit(num, playerBoats)
+            bool = ifBoatIsHit().isHit(num, playerBoats);
+            // if num is a hit and has not already been hit
             if(bool !== undefined && !playerActiveSpots.has(num)) {
-                boatCoordinate = _nextNum(num).newNum
-                return boatCoordinate
+                // 
+                boatCoordinate = _nextNum(num).newNum;
+                return boatCoordinate;
             }
             else {
-                return num
+                return num;
             }
         }
         const _returnNum = () => {
+            // num refers to num declared in parent function
             if(boatCoordinate === 0 || isSunk === true) {
-                num = randomNum()
+                num = randomNum();
             }
+            // else check if boat is sunk, update isSunk, then either go back to search for new coordinate to hit ship, or reset all values depending on whether ship is sunk
             else {
-                isSunk = _checkIfSunk(bool)
+            // bool declared in parent function
+                isSunk = _checkIfSunk(bool);
                 if(isSunk === true) {
-                    num = _isSunk()
-                    return _checkIfHit(num)
+                    num = _whenSunk();
+                    return _checkIfHit(num);
                 }
-                return _sendToSearch(num)
+                return _sendToSearch(num);
             }
-            return _checkIfHit(num)
+
+            return _checkIfHit(num);
         }
         const getAttackCoordinate = () => {
-            let num = _returnNum()
-            playerActiveSpots.add(num)
-            return num
+            const num = _returnNum();
+            playerActiveSpots.add(num);
+            return num;
         }
-        const sendAttack = (num) => {
-            return Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`)
-        }
+        const sendAttack = (num) => Gameboard(playerBoats).PlayerBoard().receiveAttack(`p${num}`)
+        
         isPlayer = true
         return {
             randomNum,
