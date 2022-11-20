@@ -7,19 +7,19 @@ function Ship (name, length) {
     const isHit = (hit, playerArr) => {
         const thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName);
         thisBoat[0].hitSpot.push(hit);
-        return _isSunk(playerArr, thisBoat[0])
+        return _isSunk(playerArr, thisBoat[0]);
     }
 
     const _isSunk = (playerArr, thisBoat) => {
 
         if(thisBoat.hitSpot.length === thisBoat.length) {
-            thisBoat.sunk = true
-            const sunkBoats = playerArr.filter(arr => arr.sunk === true)
-            const location = thisBoat.coordinates[0]
-            ps.publish('boat-sunk-msg', location)   
+            thisBoat.sunk = true;
+            const sunkBoats = playerArr.filter(arr => arr.sunk === true);
+            const location = thisBoat.coordinates[0];
+            ps.publish('boat-sunk-msg', location);   
 
             if(sunkBoats.length === 5) {
-                gameEnd(playerArr)
+                gameEnd(playerArr);
             }
         }
         return thisBoat;
@@ -52,29 +52,51 @@ const makeShips = () => {
     const _destroyer = () => Ship('destroyer', 2);
 
     const createShipArray = () => {
-        const computerBoats = [ _carrier(), _battleship(), _cruiser(), _submarine(), _destroyer() ]
-        const playerBoats = [ _carrier(), _battleship(), _cruiser(), _submarine(), _destroyer() ]
+        const computerBoats = [ _carrier(), _battleship(), _cruiser(), _submarine(), _destroyer() ];
+        const playerBoats = [ _carrier(), _battleship(), _cruiser(), _submarine(), _destroyer() ];
 
         return {
             computerBoats,
             playerBoats
         }
     }
-    
-    const allLocations = () => {
-        const fn = createShipArray();
-        const array = [];
-
-        array.push(fn.playerBoats)
-        console.log(array);
-        return array;
-    }
 
     return {
         createShipArray,
-        allLocations
     }
 
 }
 
-export { Ship, makeShips }
+function playerBoatLocations() {
+    let  playerLocations;
+    let computerLocations;
+
+    const setPlayerLocations = (boats) => playerLocations = new Set(getLocations(boats));
+    const setComputerLocations = (boats) => computerLocations = new Set(getLocations(boats));
+    
+    const getPlayerLocations = () => playerLocations
+    
+    const getCompLocations = () => computerLocations;
+    
+    return {
+        setPlayerLocations,
+        setComputerLocations,
+        getPlayerLocations,
+        getCompLocations,
+        playerLocations,
+        computerLocations
+    }
+}
+
+const getLocations = (boats) => {
+    let array = [];
+    boats.forEach(boat => {
+        boat.coordinates.forEach(coordinate => {
+            const num = coordinate.id.slice(1, 4);
+            array.push(parseInt(num)); 
+        })
+    })
+    return array;
+}
+
+export { Ship, makeShips, playerBoatLocations }

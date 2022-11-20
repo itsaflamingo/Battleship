@@ -1,7 +1,8 @@
 import { ps } from "./pubsub"
-import {toggleTurn, changeAxis} from './eventlisteners.js'
+import { toggleTurn, changeAxis } from './eventlisteners.js'
+import { makeShips } from './ship'
 
-const generateBoard = (board) => {
+function generateBoard(board) {
     const thisBoard = document.querySelector(`.${board}`)
 
     for(let i=1; i<=100; i++) {
@@ -121,7 +122,7 @@ function display() {
         body.appendChild(container);
 }
 
-const _addBoats = (length, boat, name) => {
+function _addBoats (length, boat, name) {
     for(let i = 0; i < length; i++) {
         const innerBoat = document.createElement('div');
         innerBoat.classList.add('draggable');
@@ -131,7 +132,7 @@ const _addBoats = (length, boat, name) => {
     }
 }
 
-const makeBoats = () => {
+function makeBoats() {
     
     const setComputerShips = (boat, array) => {
             array.forEach(node => {
@@ -161,7 +162,7 @@ const makeBoats = () => {
     }
 }
 
-const computerDisplay = () => {
+function computerDisplay() {
     const compBoard = document.querySelector('.computer-board')
 
     const randomNumGenerator = (length) => {
@@ -245,7 +246,7 @@ const computerDisplay = () => {
     }
 }
 
-const dragAndDrop = () => {
+function dragAndDrop() {
     const playerBoard = document.querySelector('.player-board');
     const ships = document.querySelectorAll('.ship');
     const tiles = document.querySelectorAll('.player-tile');
@@ -337,7 +338,7 @@ function dragOverHandler(e) {
     }
 }
 
-const labelBoatEmpty = (boatName) => {
+function labelBoatEmpty(boatName) {
     const boatHolder = document.querySelector(`#${boatName}`)
     boatHolder.classList.add('empty');
 }
@@ -406,7 +407,7 @@ function dropHandler(e, board) {
     if(emptyShips.length === 5) alterShipSection().isFinished();
 }
 
-const alterShipSection = () => {
+function alterShipSection() {
 
     const changeAxis = () => {
         const ships = document.querySelectorAll('.ships > .ship')
@@ -430,9 +431,10 @@ const alterShipSection = () => {
     }
 
     const isFinished = () => {
-        const shipSection = document.querySelector('.ship-section')
-        computerDisplay().toggleClick()
-        shipSection.style.display = 'none'
+        const shipSection = document.querySelector('.ship-section');
+        computerDisplay().toggleClick();
+        shipSection.style.display = 'none';
+        return getAllLocations();
     }
     
     return {
@@ -442,15 +444,24 @@ const alterShipSection = () => {
     
 }
 
-const displayShot = () => {
+function getAllLocations() {
+    ps.publish('send-to-index');
+
+}
+
+function displayShot() {
     const shotMissed = (spot) => {
-        console.log(spot);
         const target = document.querySelector(`#${spot}`);
         target.classList.add('miss');
     }
-    const shotHit = (spot) => {
+    const shotHit = (obj) => {
+        const spot = obj.spot; 
+        const boat = obj.boat 
+        const playerBoats = obj.playerBoat;
         const target = document.querySelector(`#${spot}`);
+        const boatName = target.classList[1];
         target.classList.add('boom');
+        shipSunkMsg().isShipSunk(target, boatName, boat, playerBoats);
     }
     
     return {
@@ -459,7 +470,7 @@ const displayShot = () => {
     }
 }
 
-const playAgain = () => {
+function playAgain() {
     const main = document.querySelector('.main')
 
     const removeMain = () => {
@@ -543,36 +554,52 @@ const playAgain = () => {
         rmEventListeners
     }
 }
-const shipSunkMsg = () => {
-    const msg = document.querySelector('#msg')
 
-    const selectPlayer = (location) => {
-        const player = location.id
-        const node = document.querySelector(`#${player}`);
-        if(player.includes('p') === true) {
-            ps.publish('player-ship-sunk', node.classList[1]);
+function shipSunkMsg() {
+    const msg = document.querySelector('#msg');
+
+    const isShipSunk = (target, name, boat, playerBoats) => {
+        const length = boat.length;
+        const hitSpots = boat.hitSpot.length;
+
+        if(length === hitSpots) {
+            boat.isSunk = true;
+            _checkGameEnd(boat, playerBoats);
+            _selectPlayer(target, name);
         }
-        else if(player.includes('c') === true) {
-            ps.publish('comp-ship-sunk', node.classList[1]);
+            return;
+    }
+
+    const _checkGameEnd = (boat, playerBoats) => {
+        const sunkBoats = playerBoats.filter(boat => boat.isSunk === true)
+
+        if(sunkBoats.length === 5) {
+            gameEnd(boat);
         }
     }
 
-    const playerSunkShip = (ship) => {
-        msg.innerHTML = `Your ${ship} has been sunk!`
+    const _selectPlayer = (location, name) => {
+        const player = location.id;
+
+        if(player.includes('p')) {
+            _playerSunkShip(name);
+        }
+        else if(player.includes('c')) {
+            _compSunkShip(name);
+        }
     }
-    const compSunkShip = (ship) => {
-        msg.innerHTML = `You have sunk your opponent's ${ship}!`
-    }
+
+    const _playerSunkShip = (ship) => msg.innerHTML = `Your ${ship} has been sunk!`
+    
+    const _compSunkShip = (ship) => msg.innerHTML = `You have sunk your opponent's ${ship}!`
 
     return {
-        selectPlayer,
-        playerSunkShip,
-        compSunkShip
+        isShipSunk,
     }
 }
 
-const winMsg = (player) => {
+function winMsg(player) {
     const msg = document.querySelector('#msg')
     msg.innerHTML = `${player} Wins!`
 }
-export {display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, playAgain, shipSunkMsg, winMsg}
+export { display, generateBoard, makeBoats, dragAndDrop, computerDisplay, alterShipSection, displayShot, playAgain, shipSunkMsg, winMsg }
