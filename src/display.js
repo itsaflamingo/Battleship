@@ -1,6 +1,6 @@
 import { ps } from "./pubsub"
 import { toggleTurn, changeAxis } from './eventlisteners.js'
-import { makeShips } from './ship'
+import gameEnd from './game-end'
 
 function generateBoard(board) {
     const thisBoard = document.querySelector(`.${board}`)
@@ -23,103 +23,103 @@ function generateBoard(board) {
 }
 
 function display() {
-        const body = document.querySelector('body');
-        const container = document.createElement('div');
-        container.setAttribute('class', 'container');
-        const header = document.createElement('div');
-        header.setAttribute('class', 'header');
-        const main = document.createElement('div');
-        main.setAttribute('class', 'main');
+    const body = document.querySelector('body');
+    const container = document.createElement('div');
+    container.setAttribute('class', 'container');
+    const header = document.createElement('div');
+    header.setAttribute('class', 'header');
+    const main = document.createElement('div');
+    main.setAttribute('class', 'main');
 
-        const title = document.createElement('h1');
-        title.innerHTML = 'BATTLESHIP';
+    const title = document.createElement('h1');
+    title.innerHTML = 'BATTLESHIP';
 
-        const playAgain = document.createElement('button');
-        playAgain.setAttribute('id', 'play-again');
-        playAgain.innerHTML = 'Play Again';
+    const playAgain = document.createElement('button');
+    playAgain.setAttribute('id', 'play-again');
+    playAgain.innerHTML = 'Play Again';
 
-        const dispMessage = document.createElement('div');
-        dispMessage.setAttribute('id', 'msg');
-
-        const playerSection = document.createElement('div');
-        playerSection.setAttribute('class', 'player-section');
-        const playerBoard = document.createElement('div');
-        playerBoard.setAttribute('class', 'player-board');
-
-
-        const computerSection = document.createElement('div');
-        computerSection.setAttribute('class', 'computer-section');
-        const computerBoard = document.createElement('div');
-        computerBoard.setAttribute('class', 'computer-board');
-        
-        const shipSection = document.createElement('div');
-        shipSection.setAttribute('class', 'ship-section');
-
-        const ships = document.createElement('div');
-        ships.setAttribute('class', 'ships');
-
-        const carrier = document.createElement('div');
-        carrier.setAttribute('class', 'ship');
-        carrier.setAttribute('id', 'carrier');
-        carrier.setAttribute('draggable', 'true');
-
-        _addBoats(5, carrier, 'carrier');
-
-        const battleship = document.createElement('div');
-        battleship.setAttribute('class', 'ship');
-        battleship.setAttribute('id', 'battleship');
-        battleship.setAttribute('draggable', 'true');
-
-        _addBoats(4, battleship, 'battleship');
-        
-        const cruiser = document.createElement('div');
-        cruiser.setAttribute('class', 'ship');
-        cruiser.setAttribute('id', 'cruiser');
-        cruiser.setAttribute('draggable', 'true');
-
-        _addBoats(3, cruiser, 'cruiser');
+    const dispMessage = document.createElement('div');
+    dispMessage.setAttribute('id', 'msg');
     
-        const submarine = document.createElement('div');
-        submarine.setAttribute('class', 'ship');
-        submarine.setAttribute('id', 'submarine');
-        submarine.setAttribute('draggable', 'true');
+    const playerSection = document.createElement('div');
+    playerSection.setAttribute('class', 'player-section');
+    const playerBoard = document.createElement('div');
+    playerBoard.setAttribute('class', 'player-board');
 
-        _addBoats(3, submarine, 'submarine');
 
-        const destroyer = document.createElement('div');
-        destroyer.setAttribute('class', 'ship');
-        destroyer.setAttribute('id', 'destroyer');
-        destroyer.setAttribute('draggable', 'true');
+    const computerSection = document.createElement('div');
+    computerSection.setAttribute('class', 'computer-section');
+    const computerBoard = document.createElement('div');
+    computerBoard.setAttribute('class', 'computer-board');
+        
+    const shipSection = document.createElement('div');
+    shipSection.setAttribute('class', 'ship-section');
 
-        _addBoats(2, destroyer, 'destroyer')
+    const ships = document.createElement('div');
+    ships.setAttribute('class', 'ships');
 
-        const axis = document.createElement('button');
-        axis.setAttribute('class', 'axis');
-        axis.innerHTML = 'X';
+    const carrier = document.createElement('div');
+    carrier.setAttribute('class', 'ship');
+    carrier.setAttribute('id', 'carrier');
+    carrier.setAttribute('draggable', 'true');
 
-        ships.appendChild(carrier);
-        ships.appendChild(battleship);
-        ships.appendChild(cruiser);
-        ships.appendChild(submarine);
-        ships.appendChild(destroyer);
-        shipSection.appendChild(ships);
-        shipSection.appendChild(axis);
+    _addBoats(5, carrier, 'carrier');
+
+    const battleship = document.createElement('div');
+    battleship.setAttribute('class', 'ship');
+    battleship.setAttribute('id', 'battleship');
+    battleship.setAttribute('draggable', 'true');
+
+    _addBoats(4, battleship, 'battleship');
+        
+    const cruiser = document.createElement('div');
+    cruiser.setAttribute('class', 'ship');
+    cruiser.setAttribute('id', 'cruiser');
+    cruiser.setAttribute('draggable', 'true');
+
+    _addBoats(3, cruiser, 'cruiser');
+    
+    const submarine = document.createElement('div');
+    submarine.setAttribute('class', 'ship');
+    submarine.setAttribute('id', 'submarine');
+    submarine.setAttribute('draggable', 'true');
+
+    _addBoats(3, submarine, 'submarine');
+
+    const destroyer = document.createElement('div');
+    destroyer.setAttribute('class', 'ship');
+    destroyer.setAttribute('id', 'destroyer');
+    destroyer.setAttribute('draggable', 'true');
+
+    _addBoats(2, destroyer, 'destroyer')
+
+    const axis = document.createElement('button');
+    axis.setAttribute('class', 'axis');
+    axis.innerHTML = 'X';
+
+    ships.appendChild(carrier);
+    ships.appendChild(battleship);
+    ships.appendChild(cruiser);
+    ships.appendChild(submarine);
+    ships.appendChild(destroyer);
+    shipSection.appendChild(ships);
+    shipSection.appendChild(axis);
        
 
-        header.appendChild(title);
-        header.appendChild(playAgain);
-        header.appendChild(dispMessage);
-        playerSection.appendChild(playerBoard);
-        computerSection.appendChild(computerBoard);
+    header.appendChild(title);
+    header.appendChild(playAgain);
+    header.appendChild(dispMessage);
+    playerSection.appendChild(playerBoard);
+    computerSection.appendChild(computerBoard);
 
-        main.appendChild(playerSection);
-        main.appendChild(computerSection);
+    main.appendChild(playerSection);
+    main.appendChild(computerSection);
 
-        container.appendChild(header);
-        container.appendChild(main);
-        container.appendChild(shipSection);
+    container.appendChild(header);
+    container.appendChild(main);
+    container.appendChild(shipSection);
 
-        body.appendChild(container);
+    body.appendChild(container);
 }
 
 function _addBoats (length, boat, name) {
@@ -136,10 +136,9 @@ function makeBoats() {
     
     const setComputerShips = (boat, array) => {
             array.forEach(node => {
-                node.classList.add('boat')
-                node.classList.add('draggable')
-                node.setAttribute('draggable', 'true')
-            node.classList.add(boat)
+                node.classList.add(boat);
+                node.classList.add('boat');
+                node.classList.add('draggable');
         })
         ps.publish('comp-set-location', {
             boat,
@@ -150,8 +149,8 @@ function makeBoats() {
     const setPlayerShips = (boat) => {
         boat.coordinates.forEach(spot => {
             if(spot.classList.length <= 3) {
-                spot.classList.add(boat.boatName)
-                spot.classList.add('player-tile')
+                spot.classList.add(boat.boatName);
+                spot.classList.add('player-tile');
             }
         })
     }
@@ -288,6 +287,7 @@ function handleDragLeave(e) {
         for(let i = 1; i < length; i++) {
             const selectNext = parseInt(id) + i;
             const nextDiv = document.querySelector(`#p${selectNext}`)
+            if(nextDiv === null) return;
             nextDiv.style.opacity = '1';
         }
     }
@@ -296,6 +296,7 @@ function handleDragLeave(e) {
             const selectNext = parseInt(id) + (10*i);
             if(selectNext > 100) return;
             const nextDiv = document.querySelector(`#p${selectNext}`)
+            if(nextDiv === null) return;
             nextDiv.style.opacity = '1';
         }
     }
@@ -324,6 +325,7 @@ function dragOverHandler(e) {
             if(isNaN(id)) return;
             const right = parseInt(id) + i;
             const highlight = document.querySelector(`#p${right}`);
+            if(highlight === null) return;
             highlight.style.opacity = '0.4';
         }  
     }
@@ -333,6 +335,7 @@ function dragOverHandler(e) {
             const bottom = parseInt(id) + (10 * i);
             if(bottom > 100) return;
             const highlight = document.querySelector(`#p${bottom}`);
+            if(highlight === null) return;
             highlight.style.opacity = '0.4';
         }  
     }
@@ -450,18 +453,21 @@ function getAllLocations() {
 }
 
 function displayShot() {
+
     const shotMissed = (spot) => {
         const target = document.querySelector(`#${spot}`);
         target.classList.add('miss');
     }
+
     const shotHit = (obj) => {
-        const spot = obj.spot; 
-        const boat = obj.boat 
+        const num = obj.num; 
+        const boatHit = obj.boatHit; 
         const playerBoats = obj.playerBoat;
-        const target = document.querySelector(`#${spot}`);
-        const boatName = target.classList[1];
+        boatHit.hitSpot.push(num);
+        const target = document.querySelector(`#${num}`);
+        const name = target.classList[1];
         target.classList.add('boom');
-        shipSunkMsg().isShipSunk(target, boatName, boat, playerBoats);
+        shipSunkMsg().isShipSunk({ target, name, boatHit, playerBoats });
     }
     
     return {
@@ -471,73 +477,85 @@ function displayShot() {
 }
 
 function playAgain() {
-    const main = document.querySelector('.main')
+    const main = document.querySelector('.main');
+    const container = document.querySelector('.container');
 
     const removeMain = () => {
         while (main.firstChild) {
             main.removeChild(main.lastChild);
         }
+        container.removeChild(container.lastChild);
     }
 
     const newMain = () => {
-        const playerSection = document.createElement('div')
-        playerSection.setAttribute('class', 'player-section')
-        const playerBoard = document.createElement('div')
-        playerBoard.setAttribute('class', 'player-board')
 
-        const computerSection = document.createElement('div')
-        computerSection.setAttribute('class', 'computer-section')
-        const computerBoard = document.createElement('div')
-        computerBoard.setAttribute('class', 'computer-board')
+        const playerSection = document.createElement('div');
+        playerSection.setAttribute('class', 'player-section');
+        const playerBoard = document.createElement('div');
+        playerBoard.setAttribute('class', 'player-board');
 
-        const ships = document.createElement('div')
-        ships.setAttribute('class', 'ships')
+        const computerSection = document.createElement('div');
+        computerSection.setAttribute('class', 'computer-section');
+        const computerBoard = document.createElement('div');
+        computerBoard.setAttribute('class', 'computer-board');
 
-        const carrier = document.createElement('div')
-        carrier.setAttribute('class', 'ship')
-        carrier.classList.add('draggable')
-        carrier.classList.add('carrier')
-        carrier.setAttribute('draggable', 'true')
+        const shipSection = document.createElement('div');
+        shipSection.setAttribute('class', 'ship-section');
 
-        const battleship = document.createElement('div')
-        battleship.setAttribute('class', 'ship') 
-        battleship.classList.add('draggable')
-        battleship.classList.add('battleship')
-        battleship.setAttribute('draggable', 'true')
+        const ships = document.createElement('div');
+        ships.setAttribute('class', 'ships');
+
+        const carrier = document.createElement('div');
+        carrier.setAttribute('class', 'ship');
+        carrier.setAttribute('id', 'carrier');
+        carrier.setAttribute('draggable', 'true');
+
+        const battleship = document.createElement('div');
+        battleship.setAttribute('class', 'ship') ;
+        battleship.setAttribute('id', 'battleship');
+        battleship.setAttribute('draggable', 'true');
         
-        const cruiser = document.createElement('div')
-        cruiser.setAttribute('class', 'ship')
-        cruiser.classList.add('draggable')
-        cruiser.classList.add('cruiser')
-        cruiser.setAttribute('draggable', 'true')
+        const cruiser = document.createElement('div');
+        cruiser.setAttribute('class', 'ship');
+        cruiser.setAttribute('id', 'cruiser');
+        cruiser.setAttribute('draggable', 'true');
 
-        const submarine = document.createElement('div')
-        submarine.setAttribute('class', 'ship')
-        submarine.classList.add('draggable')
-        submarine.classList.add('submarine')
-        submarine.setAttribute('draggable', 'true')
+        const submarine = document.createElement('div');
+        submarine.setAttribute('class', 'ship');
+        submarine.setAttribute('id', 'submarine');
+        submarine.setAttribute('draggable', 'true');
 
-        const destroyer = document.createElement('div')
-        destroyer.setAttribute('class', 'ship')
-        destroyer.classList.add('draggable')
-        destroyer.classList.add('destroyer')
-        destroyer.setAttribute('draggable', 'true')
+        const destroyer = document.createElement('div');
+        destroyer.setAttribute('class', 'ship');
+        destroyer.setAttribute('id', 'destroyer');
+        destroyer.setAttribute('draggable', 'true');
+
+        _addBoats(5, carrier, 'carrier');
+        _addBoats(4, battleship, 'battleship');
+        _addBoats(3, submarine, 'submarine');
+        _addBoats(3, cruiser, 'cruiser');
+        _addBoats(2, destroyer, 'destroyer');
+
 
         const axis = document.createElement('button');
-        axis.setAttribute('class', 'axis')
-        axis.innerHTML = 'X'
+        axis.setAttribute('class', 'axis');
+        axis.innerHTML = 'X';
 
-        ships.appendChild(carrier)
-        ships.appendChild(battleship)
-        ships.appendChild(cruiser)
-        ships.appendChild(submarine)
-        ships.appendChild(destroyer)
+        ships.appendChild(carrier);
+        ships.appendChild(battleship);
+        ships.appendChild(cruiser);
+        ships.appendChild(submarine);
+        ships.appendChild(destroyer);
 
-        playerSection.appendChild(playerBoard)
-        computerSection.appendChild(computerBoard)
+        shipSection.appendChild(ships);
+        shipSection.appendChild(axis);
 
-        main.appendChild(playerSection)
-        main.appendChild(computerSection)
+        playerSection.appendChild(playerBoard);
+        computerSection.appendChild(computerBoard);
+
+        main.appendChild(playerSection);
+        main.appendChild(computerSection);
+        container.appendChild(shipSection);
     }
 
     const rmEventListeners = () => {
@@ -558,20 +576,24 @@ function playAgain() {
 function shipSunkMsg() {
     const msg = document.querySelector('#msg');
 
-    const isShipSunk = (target, name, boat, playerBoats) => {
+    const isShipSunk = (obj) => {
+        const target = obj.target;
+        const name = obj.name;
+        const boat = obj.boatHit;
+        const playerBoats = obj.playerBoats;
         const length = boat.length;
         const hitSpots = boat.hitSpot.length;
 
         if(length === hitSpots) {
-            boat.isSunk = true;
-            _checkGameEnd(boat, playerBoats);
+            boat.sunk = true;
             _selectPlayer(target, name);
+            _checkGameEnd(boat, playerBoats);
         }
-            return;
+            return boat.sunk;
     }
 
     const _checkGameEnd = (boat, playerBoats) => {
-        const sunkBoats = playerBoats.filter(boat => boat.isSunk === true)
+        const sunkBoats = playerBoats.filter(boat => boat.sunk === true)
 
         if(sunkBoats.length === 5) {
             gameEnd(boat);

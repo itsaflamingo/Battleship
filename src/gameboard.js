@@ -19,7 +19,7 @@ const Gameboard = (playerBoat = []) => {
         const receiveAttack = (hitSpot, locations) => {
             const isHitBool = _hasBoatBeenHit(hitSpot, locations);
 
-            isHitBool ? _boatIsHit(hitSpot) : _boatIsNotHit(hitSpot);
+            return isHitBool ? _boatIsHit(hitSpot) : _boatIsNotHit(hitSpot);
         }
 
         return {
@@ -47,10 +47,8 @@ const Gameboard = (playerBoat = []) => {
 
         const makeBoard = () => generateBoard('player-board'); 
         
-        const receiveAttack = (hitSpot, locations) => {
-            const isHitBool = _hasBoatBeenHit(hitSpot, locations);
-
-            isHitBool ? _boatIsHit(hitSpot) : _boatIsNotHit(hitSpot);
+        const receiveAttack = (hitSpot, isHit) => {
+            isHit ? _boatIsHit(hitSpot) : _boatIsNotHit(hitSpot);
         }
         return {
             setLocation,
@@ -62,7 +60,7 @@ const Gameboard = (playerBoat = []) => {
     const _hasBoatBeenHit = (id, locations) => {
         const num = id.slice(1, 4);
 
-        if(locations.has(num)) {
+        if(locations.has(parseInt(num))) {
             locations.delete(num);
             return true;
         }
@@ -74,23 +72,30 @@ const Gameboard = (playerBoat = []) => {
         _isHit(num, boat);
         const name = boat.boatName;
         const length = boat.length;
-        //if hit, send hit coordinates to isHit
-        return Ship(name, length).isHit(num, playerBoat);
+        //if hit, add number to boat obj's hitSpot array.
+        Ship(name, length).isHit(num);
     }
 
     const _boatIsNotHit = (num) => {
-        _isNotHit(num);
-        return undefined;
+        _isNotHit(num)
     }
 
     const _findBoatHit = (hitSpot) => {
         let boat;
         playerBoat.filter(ship => {
             const co = ship.coordinates.filter(coord => {
-                    if(coord.id === (`${hitSpot}`)) {
+                if(coord.id === undefined) {
+                    if(coord === `${hitSpot}`) {
                         boat = ship;
                         return coord;
                     }
+                }
+                else {
+                    if(coord.id === `${hitSpot}`) {
+                        boat = ship;
+                        return coord;
+                    }
+                }
                 })
             return co;
         })
@@ -98,8 +103,8 @@ const Gameboard = (playerBoat = []) => {
     };
     
 
-    const _isHit = (spot, boat) => {
-        ps.publish('hit-shot', { spot, boat, playerBoat });
+    const _isHit = (num, boatHit) => {
+        ps.publish('hit-shot', { num, boatHit, playerBoat });
     }
 
     const _isNotHit = (hitSpot) => ps.publish('missed-shot', hitSpot);

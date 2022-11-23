@@ -50,6 +50,7 @@ const gameLoop = () => {
             ps.subscribe('send-to-index', sendLocationsToPlayer);
             ps.subscribe('get-player-locations', p.Player().getPlayerLocations)
             ps.subscribe('get-comp-locations', p.Computer().getCompLocations)
+            ps.subscribe('is-ship-sunk', s.isShipSunk)
         } 
 
         const unsub = () => {
@@ -90,7 +91,7 @@ const gameLoop = () => {
         m.setComputerShips('submarine', c.randomNumGenerator(3));
         m.setComputerShips('destroyer', c.randomNumGenerator(2));
 
-        dragAndDrop()
+        dragAndDrop();
     }
 
     const eventListeners = () => {

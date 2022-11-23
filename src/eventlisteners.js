@@ -11,7 +11,7 @@ function click () {
 }
 
 const toggleTurn = (e) => { 
-    const target = e.target.id
+    const target = e.target.id;
     ps.publish('player-turn', target);
     ps.publish('player-turn', target);
 }

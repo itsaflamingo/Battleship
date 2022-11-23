@@ -1,4 +1,4 @@
-import {ps} from './pubsub.js'
+import { ps } from './pubsub.js'
 
 const gameEnd = (player = 'player') => {
     if(player.coordinates[0].id[0] === 'c') {
@@ -10,4 +10,4 @@ const gameEnd = (player = 'player') => {
     ps.publish('end-msg', player)
 }
 
-export {gameEnd};
+export default gameEnd;

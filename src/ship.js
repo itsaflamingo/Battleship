@@ -1,29 +1,9 @@
-import { gameEnd } from './game-end.js'
-import { ps } from './pubsub.js'
-
-//ship factory function. returns ship information, including if it has been sunk, where it was hit, and its location.
+//ship factory function. returns ship information, including if it has been sunk, where it was hit, and its locations.
 function Ship (name, length) {
 
-    const isHit = (hit, playerArr) => {
-        const thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName);
-        thisBoat[0].hitSpot.push(hit);
-        return _isSunk(playerArr, thisBoat[0]);
-    }
-
-    const _isSunk = (playerArr, thisBoat) => {
-
-        if(thisBoat.hitSpot.length === thisBoat.length) {
-            thisBoat.sunk = true;
-            const sunkBoats = playerArr.filter(arr => arr.sunk === true);
-            const location = thisBoat.coordinates[0];
-            ps.publish('boat-sunk-msg', location);   
-
-            if(sunkBoats.length === 5) {
-                gameEnd(playerArr);
-            }
-        }
-        return thisBoat;
-    }
+    // When hit, add coordinate to hit spot.
+    const isHit = (hit) => boat.hitSpot.push(hit);
+    
     const shipLocation = (location = [], playerArr = []) => {
         const thisBoat = playerArr.filter(arr => arr.boatName === boat.boatName);
         thisBoat[0].coordinates = location;

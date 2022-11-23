@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,400;1,900&display=swap');
 body {
     margin: 0px;
+    font-family: 'Montserrat', sans-serif;
 }
 .container {
     height: 100vh;
     width: 100vw;
     display: grid;
 
-    grid-template-rows: 1fr 7fr;
+    grid-template-rows: 1fr 8fr;
 }
 .header {
     grid-row-start: 1;
@@ -37,8 +38,8 @@ body {
 }
 /* Header */
 h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    margin: 1rem;
 }
 #play-again {
     width: 8vw;
@@ -53,16 +54,15 @@ h1 {
     color: white;
 }
 #msg {
-    height: 5vh;
-    font-family: 'Montserrat', sans-serif;
+    height: 4vh;
     font-size: 2rem;
     margin-top: 1rem;
 }
 /* Boards */
 .computer-board, .player-board {
     display: grid;
-    grid-template-columns: repeat(10, 5vmin);
-    grid-template-rows: repeat(10, 5vmin);
+    grid-template-columns: repeat(10, 7vmin);
+    grid-template-rows: repeat(10, 7vmin);
 }
 .player-tile, .comp-tile {
     border: 1px solid rgb(155, 215, 245);
@@ -80,6 +80,7 @@ h1 {
     border: 1px solid black;
     justify-self: center;
     margin-bottom: 5vh;
+    overflow: auto;
 }
 .ships {
     height: 100%;
@@ -113,7 +114,7 @@ h1 {
 .ship > * {
     width: 20%;
     background-color: orange;
-    border: 1px solid black;
+    border: 1px solid orange;
 }
 .ship:first-child {
     border-radius: 20% 0 0 20%;

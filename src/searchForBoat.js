@@ -2,38 +2,54 @@
 /* array of options*/
 /* check if num is available function */
 
-const checkAvailability = (num, options) => {
+function isSpotAvailable (num, options) {
   if(options.has(num)) {
     options.delete(num);
     return true;
   }  
   return false;
-};
+}
+
+function Direction() {
+  
+  const isRight = (bool) => bool;
+  const isUp = (bool) => bool;
+  const isVertical = (bool) => bool
+
+  return {
+    isVertical,
+    isRight,
+    isUp
+  }
+}
 	
 function searchForBoat() {
   	
-    let isVertical = false;
 	  let newNum = 0;
+    const d = Direction();
+    let isVertical = d.isVertical(false);
   
   	const moveHorizontal = () => {
-    	let isRight = true;
+    	let isRight = d.isRight(true);
 
-  		const moveRight = (num, options) => {
+  		const moveRight = (num, originalNum, options) => {
     	    newNum = num + 1;
-    	    if(checkAvailability(newNum, options) === true) return newNum;
+    	    if(isSpotAvailable(newNum, options) === true) return newNum;
 
-          isRight = false;
-    	    return ifRight(num, options);
+          isRight = d.isRight(false);
+    	    return ifRight(num, originalNum, options);
     	}
-    	const moveLeft = (num, options) => {
+    	const moveLeft = (num, originalNum, options) => {
     		newNum = num - 1;
-    	  if(checkAvailability(newNum, options) === true) return newNum;
+    	  if(isSpotAvailable(newNum, options) === true) return newNum;
           
-        isVertical = true;
-    	  return ifVertical(num, options);
+        isVertical = d.isVertical(true);
+        // reset isRight
+        isRight = d.isRight(true);
+    	  return ifVertical(num, originalNum, options);
     	}
       
-      const ifRight = (num, options) => isRight ? moveRight(num, options) : moveLeft(num, options);
+      const ifRight = (num, originalNum, options) => isRight ? moveRight(num, originalNum, options) : moveLeft(num, originalNum, options);
       
       
       return {
@@ -42,24 +58,25 @@ function searchForBoat() {
   		}
       
    	const moveVertical = () => {
-        	let isUp = true;
+        	let isUp = d.isUp(true);
         
-        const moveUp = (num, options) => {
+        const moveUp = (num, originalNum, options) => {
         	newNum = num + 10;
-            if(checkAvailability(newNum, options) === true) {
-          	    return newNum;
-            }
-          isUp = false;
-          return ifUp(num, options);
+          if(isSpotAvailable(newNum, options) === true) return newNum;
+            
+          isUp = d.isUp(false);
+          return ifUp(num, originalNum, options);
         }
       
-        const moveDown = (num, options) => {
+        const moveDown = (num, originalNum, options) => {
         	newNum = num - 10;
-            if(checkAvailability(newNum, options) === true) return newNum;
-            return null;
+          if(isSpotAvailable(newNum, options) === true) return newNum;
+          isUp = d.isUp(true);
+          isVertical = d.isVertical(false);
+          return ifVertical(originalNum, originalNum, options);
         }
       
-        const ifUp = (num, options) => isUp ? moveUp(num, options) : moveDown(num, options);
+        const ifUp = (num, originalNum, options) => isUp ? moveUp(num, originalNum, options) : moveDown(num, originalNum, options);
         
       
       return {
@@ -67,14 +84,15 @@ function searchForBoat() {
       }
     }
   
-    const ifVertical = (num, options) => {
-        return isVertical ? moveVertical().ifUp(num, options) : 
-        moveHorizontal().ifRight(num, options);
+    const ifVertical = (num, originalNum, options) => {
+        return isVertical ? moveVertical().ifUp(num, originalNum, options) : 
+        moveHorizontal().ifRight(num, originalNum, options);
     }
 
     const reset = () => {
-        isVertical = false
-        add = true
+        d.isRight(true);
+        d.isVertical(false);
+        d.isUp(true);
     }
     
   return {
