@@ -70,6 +70,7 @@ h1 {
 }
 /* ship-section */
 .ship-section {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,7 +85,7 @@ h1 {
 }
 .ships {
     height: 100%;
-    width: 20vw;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -102,7 +103,9 @@ h1 {
     width: 100%;
 }
 .axis {
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 95.4%;
     background-color: white;
     border: 1px solid black;
 }
