@@ -146,4 +146,4 @@ function Players(compBoats = [], playerBoats = []) {
     }
 }
 
-export {Players}
+export { Players }

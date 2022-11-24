@@ -1,5 +1,5 @@
 import { ps } from "./pubsub"
-import { toggleTurn, changeAxis } from './eventlisteners.js'
+import { toggleTurn, changeAxis } from './eventlisteners'
 import gameEnd from './game-end'
 
 function generateBoard(board) {
@@ -324,6 +324,8 @@ function dragOverHandler(e) {
         for(let i=1; i<length; i++) {
             if(isNaN(id)) return;
             const right = parseInt(id) + i;
+            const prevNum = right - 1;
+            if(prevNum % 10 === 0 && right > 10*(1) + 1) return;
             const highlight = document.querySelector(`#p${right}`);
             if(highlight === null) return;
             highlight.style.opacity = '0.4';
