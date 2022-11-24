@@ -23,18 +23,15 @@ body {
     grid-row-end: 3;
     display: flex;
     gap: 1rem;
-}
-.player-section {
-    margin-left: 5rem;
-}
-.computer-section {
-    margin-right: 5rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .player-section, .computer-section {
-    width: 100%;
+    width: 43%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 20px;
 }
 /* Header */
 h1 {
@@ -43,6 +40,8 @@ h1 {
 }
 #play-again {
     width: 8vw;
+    min-width: 90px;
+    min-height: 37.5px;
     height: 5vh;
     background-color: white;
     border: 1px solid black;
@@ -72,15 +71,20 @@ h1 {
 .ship-section {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    justify-self: center;
+    padding: 10px;
+
     height: 10vh;
     width: 30vw;
+
     margin-top: 2vh;
     margin-left: 1rem;
-    border: 1px solid black;
-    justify-self: center;
     margin-bottom: 5vh;
+
+    border: 1px solid black;
     overflow: auto;
 }
 .ships {
